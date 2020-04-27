@@ -12,7 +12,6 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/common"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/devops"
-	"github.com/timescale/tsbs/cmd/tsbs_generate_data/iot"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/serialize"
 )
 
@@ -188,15 +187,6 @@ func (g *DataGenerator) getSimulatorConfig(dgc *DataGeneratorConfig) (common.Sim
 			InitHostCount:   dgc.InitialScale,
 			HostCount:       dgc.Scale,
 			HostConstructor: devops.NewHost,
-		}
-	case useCaseIoT:
-		ret = &iot.SimulatorConfig{
-			Start: g.tsStart,
-			End:   g.tsEnd,
-
-			InitGeneratorScale:   dgc.InitialScale,
-			GeneratorScale:       dgc.Scale,
-			GeneratorConstructor: iot.NewTruck,
 		}
 	case useCaseCPUOnly:
 		ret = &devops.CPUOnlySimulatorConfig{

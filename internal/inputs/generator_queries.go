@@ -10,15 +10,11 @@ import (
 	"sort"
 	"time"
 
-	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/databases/akumuli"
 	"github.com/spf13/pflag"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/databases/cassandra"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/databases/clickhouse"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/databases/cratedb"
-	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/databases/influx"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/databases/mongo"
-	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/databases/siridb"
-	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/databases/timescaledb"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/utils"
 )
 
@@ -221,25 +217,6 @@ func (g *QueryGenerator) initFactories() error {
 		return err
 	}
 
-	influx := &influx.BaseGenerator{}
-	if err := g.addFactory(FormatInflux, influx); err != nil {
-		return err
-	}
-
-	timescale := &timescaledb.BaseGenerator{
-		UseJSON:       g.config.TimescaleUseJSON,
-		UseTags:       g.config.TimescaleUseTags,
-		UseTimeBucket: g.config.TimescaleUseTimeBucket,
-	}
-	if err := g.addFactory(FormatTimescaleDB, timescale); err != nil {
-		return err
-	}
-
-	siriDB := &siridb.BaseGenerator{}
-	if err := g.addFactory(FormatSiriDB, siriDB); err != nil {
-		return err
-	}
-
 	mongo := &mongo.BaseGenerator{
 		UseNaive: g.config.MongoUseNaive,
 	}
@@ -247,8 +224,7 @@ func (g *QueryGenerator) initFactories() error {
 		return err
 	}
 
-	akumuli := &akumuli.BaseGenerator{}
-	return g.addFactory(FormatAkumuli, akumuli)
+	return nil
 }
 
 func (g *QueryGenerator) addFactory(database string, factory interface{}) error {
