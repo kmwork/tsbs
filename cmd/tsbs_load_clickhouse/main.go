@@ -57,6 +57,7 @@ func init() {
 
 	pflag.String("host", "localhost", "Hostname of ClickHouse instance")
 	pflag.String("user", "default", "User to connect to ClickHouse as")
+	pflag.String("port", "default", "Kostya-Port to connect to ClickHouse as")
 	pflag.String("password", "", "Password to connect to ClickHouse")
 
 	pflag.Bool("log-batches", false, "Whether to time individual batches.")
