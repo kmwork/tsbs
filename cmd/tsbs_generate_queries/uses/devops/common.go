@@ -62,7 +62,8 @@ func kostyaInitCpuMetrics() []string {
 	var i int64
 	var r = make([]string, common.KostyaNumFields)
 	for i = 0; i < common.KostyaNumFields; i++ {
-		r = append(r, "kostya_"+strconv.FormatInt(i, 10))
+		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
+		r = append(r, fieldName)
 	}
 	return r
 }

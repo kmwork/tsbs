@@ -18,8 +18,9 @@ func kostyaGenerate() []common.LabeledDistributionMaker {
 	var r = make([]common.LabeledDistributionMaker, common.KostyaNumFields)
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
+		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
 		var item = common.LabeledDistributionMaker{
-			Label: []byte("kostya_" + strconv.FormatInt(i, 10)), DistributionMaker: func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) },
+			Label: []byte(fieldName), DistributionMaker: func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) },
 		}
 		r = append(r, item)
 	}
