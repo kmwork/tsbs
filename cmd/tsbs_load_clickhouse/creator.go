@@ -28,12 +28,12 @@ func (d *dbCreator) readDataHeader(br *bufio.Reader) {
 	// The first line containing tags table name ('tags') followed by list of tags, comma-separated.
 	// Ex.: tags,hostname,region,datacenter,rack,os,arch,team,service,service_version
 	// The second through N-1 line containing table name (ex.: 'cpu') followed by list of column names,
-	// comma-separated. Ex.: cpu,usage_user,usage_system,usage_idle,usage_nice,usage_iowait,usage_irq,usage_softirq
+	// comma-separated. Ex.: cpu,kostya_0,usage_system,usage_idle,usage_nice,usage_iowait,usage_irq,usage_softirq
 	// The last line being blank to separate from the data
 	//
 	// Header example:
 	// tags,hostname,region,datacenter,rack,os,arch,team,service,service_version,service_environment
-	// cpu,usage_user,usage_system,usage_idle,usage_nice,usage_iowait,usage_irq,usage_softirq,usage_steal,usage_guest,usage_guest_nice
+	// cpu,kostya_0,usage_system,usage_idle,usage_nice,usage_iowait,usage_irq,usage_softirq,usage_steal,usage_guest,usage_guest_nice
 	// disk,total,free,used,used_percent,inodes_total,inodes_free,inodes_used
 	// nginx,accepts,active,handled,reading,requests,waiting,writing
 
@@ -140,14 +140,14 @@ func (d *dbCreator) CreateDB(dbName string) error {
 	tagColumnTypes = tagTypes
 
 	// d.cols content are lines (metrics descriptions) as:
-	// cpu,usage_user,usage_system,usage_idle,usage_nice,usage_iowait,usage_irq,usage_softirq,usage_steal,usage_guest,usage_guest_nice
+	// cpu,kostya_0,usage_system,usage_idle,usage_nice,usage_iowait,usage_irq,usage_softirq,usage_steal,usage_guest,usage_guest_nice
 	// disk,total,free,used,used_percent,inodes_total,inodes_free,inodes_used
 	// nginx,accepts,active,handled,reading,requests,waiting,writing
 	// generalised description:
 	// tableName,fieldName1,...,fieldNameX
 	for _, cols := range d.cols {
 		// cols content:
-		// cpu,usage_user,usage_system,usage_idle,usage_nice,usage_iowait,usage_irq,usage_softirq,usage_steal,usage_guest,usage_guest_nice
+		// cpu,kostya_0,usage_system,usage_idle,usage_nice,usage_iowait,usage_irq,usage_softirq,usage_steal,usage_guest,usage_guest_nice
 		createMetricsTable(db, strings.Split(strings.TrimSpace(cols), ","))
 	}
 

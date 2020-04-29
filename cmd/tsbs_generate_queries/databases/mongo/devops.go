@@ -315,7 +315,7 @@ func (d *Devops) GroupByTimeAndPrimaryTag(qi query.Query, numMetrics int) {
 // e.g. in pseudo-SQL:
 //
 // SELECT * FROM cpu
-// WHERE usage_user > 90.0
+// WHERE kostya_0 > 90.0
 // AND time >= '$TIME_START' AND time < '$TIME_END'
 // AND (hostname = '$HOST' OR hostname = '$HOST2'...)
 func (d *Devops) HighCPUForHosts(qi query.Query, nHosts int) {
@@ -356,7 +356,7 @@ func (d *Devops) HighCPUForHosts(qi query.Query, nHosts int) {
 	pipelineQuery = append(pipelineQuery, getTimeFilterPipeline(interval)...)
 	pipelineQuery = append(pipelineQuery, bson.M{
 		"$match": bson.M{
-			"events.usage_user": bson.M{"$gt": 90.0},
+			"events.kostya_0": bson.M{"$gt": 90.0},
 		},
 	})
 
@@ -488,7 +488,7 @@ func (d *Devops) GroupByOrderByLimit(qi query.Query) {
 						bson.M{"$mod": []interface{}{"$events.timestamp_ns", bucketNano}},
 					},
 				},
-				"field": "$events.usage_user",
+				"field": "$events.kostya_0",
 			},
 		},
 		{

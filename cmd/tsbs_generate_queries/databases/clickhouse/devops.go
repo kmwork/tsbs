@@ -191,7 +191,7 @@ func (d *Devops) GroupByOrderByLimit(qi query.Query) {
 	sql := fmt.Sprintf(`
         SELECT
             toStartOfMinute(created_at) AS minute,
-            max(usage_user)
+            max(kostya_0)
         FROM cpu
         WHERE created_at < '%s'
         GROUP BY minute
@@ -210,7 +210,7 @@ func (d *Devops) GroupByOrderByLimit(qi query.Query) {
 // e.g. in pseudo-SQL:
 //
 // SELECT * FROM cpu
-// WHERE usage_user > 90.0
+// WHERE kostya_0 > 90.0
 // AND time >= '$TIME_START' AND time < '$TIME_END'
 // AND (hostname = '$HOST' OR hostname = '$HOST2'...)
 //
@@ -229,7 +229,7 @@ func (d *Devops) HighCPUForHosts(qi query.Query, nHosts int) {
 	sql := fmt.Sprintf(`
         SELECT *
         FROM cpu
-        PREWHERE (usage_user > 90.0) AND (created_at >= '%s') AND (created_at <  '%s') %s
+        PREWHERE (kostya_0 > 90.0) AND (created_at >= '%s') AND (created_at <  '%s') %s
         `,
 		interval.Start().Format(clickhouseTimeStringFormat),
 		interval.End().Format(clickhouseTimeStringFormat),

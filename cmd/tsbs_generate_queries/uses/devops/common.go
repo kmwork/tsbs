@@ -57,7 +57,7 @@ func (d *Core) GetRandomHosts(nHosts int) ([]string, error) {
 
 // cpuMetrics is the list of metric names for CPU
 var hideCpuMetrics = []string{
-	"usage_user",
+	"kostya_0",
 	"usage_system",
 }
 

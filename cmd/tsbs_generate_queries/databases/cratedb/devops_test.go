@@ -110,7 +110,7 @@ func TestDevopsGroupByTimeAndPrimaryTagQuery(t *testing.T) {
 		SqlQuery: []byte(`
 		SELECT
 			date_trunc('hour', ts) AS hour,
-			mean(usage_user) AS mean_usage_user, mean(usage_system) AS mean_usage_system
+			mean(kostya_0) AS mean_usage_user, mean(usage_system) AS mean_usage_system
 		FROM cpu
 		WHERE ts >= 1136357713823
 		  AND ts < 1136400913823
@@ -141,7 +141,7 @@ func TestDevopsGroupByOrderByLimitQuery(t *testing.T) {
 		SqlQuery: []byte(`
 		SELECT
 			date_trunc('minute', ts) as minute,
-			max(usage_user)
+			max(kostya_0)
 		FROM cpu
 		WHERE ts < 1136416682472
 		GROUP BY minute
@@ -206,7 +206,7 @@ func TestDevopsHighCPUForHostsQuery(t *testing.T) {
 		SqlQuery: []byte(`
 		SELECT *
 		FROM cpu
-		WHERE usage_user > 90.0
+		WHERE kostya_0 > 90.0
 		  AND ts >= 1136357713823
 		  AND ts < 1136400913823
 		  AND tags['hostname'] IN ('host_8', 'host_0')`),
@@ -238,7 +238,7 @@ func TestDevopsGroupByTimeQuery(t *testing.T) {
 		SqlQuery: []byte(`
 		SELECT
 			date_trunc('minute', ts) as minute,
-			max(usage_user) AS max_usage_user, max(usage_system) AS max_usage_system
+			max(kostya_0) AS max_usage_user, max(usage_system) AS max_usage_system
 		FROM cpu
 		WHERE tags['hostname'] IN ('host_2', 'host_5')
 		  AND ts >= 1136115302666

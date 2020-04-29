@@ -113,7 +113,7 @@ func (d *Devops) GroupByOrderByLimit(qi query.Query) {
 	sql := fmt.Sprintf(`
 		SELECT
 			date_trunc('minute', ts) as minute,
-			max(usage_user)
+			max(kostya_0)
 		FROM cpu
 		WHERE ts < %d
 		GROUP BY minute
@@ -159,7 +159,7 @@ func (d *Devops) HighCPUForHosts(qi query.Query, nHosts int) {
 	sql := fmt.Sprintf(`
 		SELECT *
 		FROM cpu
-		WHERE usage_user > 90.0
+		WHERE kostya_0 > 90.0
 		  AND ts >= %d
 		  AND ts < %d
 		  AND %s IN ('%s')`,
