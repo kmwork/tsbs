@@ -8,7 +8,7 @@ if [[ -z "$EXE_FILE_NAME" ]]; then
 fi
 
 # Load parameters - common
-DATA_FILE_NAME=cassandra-data-t1.gz
+DATA_FILE_NAME=cassandra-data-t2.gz
 DATABASE_USER=${DATABASE_USER:-default}
 DATABASE_PASSWORD=1
 export BULK_DATA_DIR=/my-ext4
