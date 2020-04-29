@@ -188,24 +188,6 @@ func (g *DataGenerator) getSimulatorConfig(dgc *DataGeneratorConfig) (common.Sim
 			HostCount:       dgc.Scale,
 			HostConstructor: devops.NewHost,
 		}
-	case useCaseCPUOnly:
-		ret = &devops.CPUOnlySimulatorConfig{
-			Start: g.tsStart,
-			End:   g.tsEnd,
-
-			InitHostCount:   dgc.InitialScale,
-			HostCount:       dgc.Scale,
-			HostConstructor: devops.NewHostCPUOnly,
-		}
-	case useCaseCPUSingle:
-		ret = &devops.CPUOnlySimulatorConfig{
-			Start: g.tsStart,
-			End:   g.tsEnd,
-
-			InitHostCount:   dgc.InitialScale,
-			HostCount:       dgc.Scale,
-			HostConstructor: devops.NewHostCPUSingle,
-		}
 	default:
 		err = fmt.Errorf("unknown use case: '%s'", dgc.Use)
 	}
