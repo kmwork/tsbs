@@ -1,7 +1,6 @@
 package devops
 
 import (
-	"fmt"
 	"math/rand"
 	"reflect"
 	"strconv"
@@ -126,16 +125,6 @@ type Host struct {
 	SimulatedMeasurements []common.SimulatedMeasurement
 
 	// These are all assigned once, at Host creation:
-	Name               string
-	Region             string
-	Datacenter         string
-	Rack               string
-	OS                 string
-	Arch               string
-	Team               string
-	Service            string
-	ServiceVersion     string
-	ServiceEnvironment string
 }
 
 func newHostMeasurements(start time.Time) []common.SimulatedMeasurement {
@@ -176,21 +165,8 @@ func NewHostCPUSingle(i int, start time.Time) Host {
 func newHostWithMeasurementGenerator(i int, start time.Time, generator func(time.Time) []common.SimulatedMeasurement) Host {
 	sm := generator(start)
 
-	region := randomRegionSliceChoice(regions)
-
 	h := Host{
 		// Tag Values that are static throughout the life of a Host:
-		Name:               fmt.Sprintf(hostFmt, i),
-		Region:             region.Name,
-		Datacenter:         common.RandomStringSliceChoice(region.Datacenters),
-		Rack:               getStringRandomInt(machineRackChoicesPerDatacenter),
-		Arch:               common.RandomStringSliceChoice(MachineArchChoices),
-		OS:                 common.RandomStringSliceChoice(MachineOSChoices),
-		Service:            getStringRandomInt(machineServiceChoices),
-		ServiceVersion:     getStringRandomInt(machineServiceVersionChoices),
-		ServiceEnvironment: common.RandomStringSliceChoice(MachineServiceEnvironmentChoices),
-		Team:               common.RandomStringSliceChoice(MachineTeamChoices),
-
 		SimulatedMeasurements: sm,
 	}
 

@@ -78,3 +78,15 @@ func (s *commonDevopsSimulator) adjustNumHostsForEpoch() {
 	missingScale := float64(uint64(len(s.hosts)) - s.initHosts)
 	s.epochHosts = s.initHosts + uint64(missingScale*float64(s.epoch)/float64(s.epochs-1))
 }
+
+func (s *commonDevopsSimulator) populatePoint(p *serialize.Point, measureIdx int) bool {
+	host := &s.hosts[s.hostIndex]
+
+	// Populate measurement-specific tags and fields:
+	host.SimulatedMeasurements[measureIdx].ToPoint(p)
+
+	ret := s.hostIndex < s.epochHosts
+	s.madePoints++
+	s.hostIndex++
+	return ret
+}
