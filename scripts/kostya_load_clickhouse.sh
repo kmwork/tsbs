@@ -24,7 +24,7 @@ cat ${DATA_FILE} | gunzip | $EXE_FILE_NAME \
                                 --host=${DATABASE_HOST} \
                                 --user=${DATABASE_USER} \
                                 --password=${DATABASE_PASSWORD} \
-                                --port=8123 \
+                                --port=9000 \
                                 --db-name=${DATABASE_NAME} \
                                 --batch-size=${BATCH_SIZE} \
                                 --workers=1 \

@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/jmoiron/sqlx"
@@ -257,9 +258,12 @@ func getConnectString(db bool) string {
 	// connectString: tcp://127.0.0.1:9000?debug=true
 	// ClickHouse ex.:
 	// tcp://host1:9000?username=user&password=qwerty&database=clicks&read_timeout=10&write_timeout=20&alt_hosts=host2:9000,host3:9000
+	var strUrl string
 	if db {
-		return fmt.Sprintf("tcp://%s:%s?username=%s&password=%s&database=%s", host, port, user, password, loader.DatabaseName())
+		strUrl = fmt.Sprintf("tcp://%s:%s?username=%s&password=%s&database=%s", host, port, user, password, loader.DatabaseName())
 	} else {
-		return fmt.Sprintf("tcp://%s:%s?username=%s&password=%s", host, port, user, password)
+		strUrl = fmt.Sprintf("tcp://%s:%s?username=%s&password=%s", host, port, user, password)
 	}
+	log.Printf("connection Url = %s, Type_as_db = %t", strUrl, db)
+	return strUrl
 }
