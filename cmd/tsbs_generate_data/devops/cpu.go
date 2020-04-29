@@ -2,6 +2,7 @@ package devops
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"strconv"
 	"time"
@@ -14,7 +15,7 @@ var labelCPU = []byte("cpu") // heap optimization
 var cpuFields = kostyaGenerateLabels()
 
 func kostyaGenerateLabels() []common.LabeledDistributionMaker {
-	fmt.Print("[kostya-start2] kostyaGenerateLabels start")
+	log.Print("[kostya-start2] kostyaGenerateLabels start")
 	var r = make([]common.LabeledDistributionMaker, common.KostyaNumFields)
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
@@ -24,7 +25,7 @@ func kostyaGenerateLabels() []common.LabeledDistributionMaker {
 		}
 		r = append(r, item)
 	}
-	fmt.Printf("[kostya-done2] kostyaGenerateLabels done, len = %d", len(r))
+	log.Printf("[kostya-done2] kostyaGenerateLabels done, len = %d", len(r))
 	return r
 }
 
