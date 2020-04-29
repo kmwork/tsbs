@@ -207,7 +207,8 @@ func (g *DataGenerator) getSerializer(sim common.Simulator, format string) (seri
 		g.writeHeader(sim)
 		ret = &serialize.CrateDBSerializer{}
 	case FormatClickhouse:
-		fallthrough
+		g.writeHeader(sim)
+		ret = &serialize.TimescaleDBSerializer{}
 	default:
 		err = fmt.Errorf(errUnknownFormatFmt, format)
 	}
