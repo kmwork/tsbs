@@ -223,18 +223,11 @@ func (g *DataGenerator) getSerializer(sim common.Simulator, format string) (seri
 		ret = &serialize.InfluxSerializer{}
 	case FormatMongo:
 		ret = &serialize.MongoSerializer{}
-	case FormatSiriDB:
-		ret = &serialize.SiriDBSerializer{}
-	case FormatAkumuli:
-		ret = serialize.NewAkumuliSerializer()
 	case FormatCrateDB:
 		g.writeHeader(sim)
 		ret = &serialize.CrateDBSerializer{}
 	case FormatClickhouse:
 		fallthrough
-	case FormatTimescaleDB:
-		g.writeHeader(sim)
-		ret = &serialize.TimescaleDBSerializer{}
 	default:
 		err = fmt.Errorf(errUnknownFormatFmt, format)
 	}
