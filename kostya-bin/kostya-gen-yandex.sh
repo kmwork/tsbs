@@ -1,8 +1,8 @@
 #!/bin/sh -v
 ./tsbs_generate_data --use-case="devops" --seed=500 --scale=5000 \
     --timestamp-start="2020-04-01T00:00:00Z" \
-    --timestamp-end="2020-04-01T00:00:10Z" \
-    --log-interval="60s" --format="cassandra" \
+    --timestamp-end="2020-04-01T00:01:00Z" \
+    --log-interval="10s" --format="cassandra" \
     | gzip > /my-ext4/cassandra-data-t1.gz
 
 #./tsbs_generate_queries --use-case="devops" --seed=500 --scale=5000 \
