@@ -15,7 +15,7 @@ export BULK_DATA_DIR=/my-ext4
 # Load parameters - personal
 PROGRESS_INTERVAL=${PROGRESS_INTERVAL:-10s}
 HASH_WORKERS=${HASH_WORKERS:-false}
-
+export BATCH_SIZE=10
 EXE_DIR=${EXE_DIR:-$(dirname $0)}
 source ${EXE_DIR}/load_common.sh
 
