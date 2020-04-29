@@ -3,4 +3,4 @@
     --timestamp-start="2020-04-01T00:00:00Z" \
     --timestamp-end="2020-04-01T00:01:00Z" \
     --log-interval="30s" --format="clickhouse" \
-    | gzip > /my-ext4/cassandra-data-t2.gz
+    | gzip > /my-ext4/yandex-data-t3.gz
