@@ -47,7 +47,7 @@ func newSingleCPUMeasurement(start time.Time) *CPUMeasurement {
 }
 
 func newCPUMeasurementNumDistributions(start time.Time, numDistributions int) *CPUMeasurement {
-	fmt.Printf("[kostya-start4] newCPUMeasurementNumDistributions start")
+	log.Println("[kostya-start4] newCPUMeasurementNumDistributions start")
 	sub := common.NewSubsystemMeasurementWithDistributionMakers(start, cpuFields[:numDistributions])
 	return &CPUMeasurement{sub}
 }
