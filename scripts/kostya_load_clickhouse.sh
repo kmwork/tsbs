@@ -25,6 +25,6 @@ cat ${DATA_FILE} | gunzip | $EXE_FILE_NAME \
                                 --password=${DATABASE_PASSWORD} \
                                 --db-name=${DATABASE_NAME} \
                                 --batch-size=${BATCH_SIZE} \
-                                --workers=4 \
+                                --workers=1 \
                                 --reporting-period=${PROGRESS_INTERVAL} \
                                 --hash-workers=${HASH_WORKERS}
