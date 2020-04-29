@@ -23,6 +23,7 @@ const (
 // Program option vars:
 var (
 	host     string
+	port     string
 	user     string
 	password string
 
