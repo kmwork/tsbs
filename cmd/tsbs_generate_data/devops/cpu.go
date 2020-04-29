@@ -11,10 +11,10 @@ import (
 
 var (
 	labelCPU  = []byte("cpu") // heap optimization
-	cpuFields = kostyaGenerate()
+	cpuFields = kostyaGenerateLabels()
 )
 
-func kostyaGenerate() []common.LabeledDistributionMaker {
+func kostyaGenerateLabels() []common.LabeledDistributionMaker {
 	var r = make([]common.LabeledDistributionMaker, common.KostyaNumFields)
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
