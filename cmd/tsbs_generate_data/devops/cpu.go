@@ -12,19 +12,18 @@ import (
 )
 
 var labelCPU = []byte("cpu") // heap optimization
-var cpuFields []common.LabeledDistributionMaker = nil
+var cpuFields [common.KostyaNumFields]common.LabeledDistributionMaker
 
 // for cpuFields generate (c) kostya
 func init() {
 	log.Print("[kostya-start2] kostyaGenerateLabels start")
-	cpuFields = make([]common.LabeledDistributionMaker, common.KostyaNumFields)
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
 		var item = common.LabeledDistributionMaker{
 			Label: []byte(fieldName), DistributionMaker: func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) },
 		}
-		cpuFields = append(cpuFields, item)
+		cpuFields[i] = item
 	}
 	log.Printf("[kostya-done2] kostyaGenerateLabels done, len = %d", len(cpuFields))
 }
@@ -54,5 +53,5 @@ func newCPUMeasurementNumDistributions(start time.Time, numDistributions int) *C
 }
 
 func (m *CPUMeasurement) ToPoint(p *serialize.Point) {
-	m.ToPointAllInt64(p, labelCPU, cpuFields)
+	m.ToPointAllInt64(p, labelCPU, cpuFields[:])
 }

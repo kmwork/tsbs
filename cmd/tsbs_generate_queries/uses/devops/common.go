@@ -57,16 +57,15 @@ func (d *Core) GetRandomHosts(nHosts int) ([]string, error) {
 	return getRandomHosts(nHosts, d.Scale)
 }
 
-var cpuMetrics []string = nil
+var cpuMetrics [common.KostyaNumFields]string
 
 // init cpuMetrics (c) kostya
 func init() {
 	log.Print("[kostya-run] kostyaInitCpuMetrics start")
 	var i int64
-	cpuMetrics = make([]string, common.KostyaNumFields)
 	for i = 0; i < common.KostyaNumFields; i++ {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
-		cpuMetrics = append(cpuMetrics, fieldName)
+		cpuMetrics[i] = fieldName
 	}
 	log.Printf("[kostya-run] kostyaInitCpuMetrics done. len = %d", len(cpuMetrics))
 }
@@ -84,7 +83,7 @@ func GetCPUMetricsSlice(numMetrics int) ([]string, error) {
 
 // GetAllCPUMetrics returns all the metrics for CPU
 func GetAllCPUMetrics() []string {
-	return cpuMetrics
+	return cpuMetrics[:]
 }
 
 // GetCPUMetricsLen returns the number of metrics in CPU
