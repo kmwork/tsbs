@@ -12,21 +12,21 @@ import (
 )
 
 var labelCPU = []byte("cpu") // heap optimization
-var cpuFields = kostyaGenerateLabels()
+var cpuFields []common.LabeledDistributionMaker = nil
 
-func kostyaGenerateLabels() []common.LabeledDistributionMaker {
+// for cpuFields generate (c) kostya
+func init() {
 	log.Print("[kostya-start2] kostyaGenerateLabels start")
-	var r = make([]common.LabeledDistributionMaker, common.KostyaNumFields)
+	cpuFields = make([]common.LabeledDistributionMaker, common.KostyaNumFields)
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
 		var item = common.LabeledDistributionMaker{
 			Label: []byte(fieldName), DistributionMaker: func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) },
 		}
-		r = append(r, item)
+		cpuFields = append(cpuFields, item)
 	}
 	log.Printf("[kostya-done2] kostyaGenerateLabels done, len = %d", len(r))
-	return r
 }
 
 // Reuse NormalDistributions as arguments to other distributions. This is
