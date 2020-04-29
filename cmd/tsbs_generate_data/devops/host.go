@@ -155,10 +155,6 @@ type Host struct {
 func newHostMeasurements(start time.Time) []common.SimulatedMeasurement {
 	return []common.SimulatedMeasurement{
 		NewCPUMeasurement(start),
-		NewDiskMeasurement(start),
-		NewKernelMeasurement(start),
-		NewNetMeasurement(start),
-		NewRedisMeasurement(start),
 	}
 }
 
