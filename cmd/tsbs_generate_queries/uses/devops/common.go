@@ -59,12 +59,14 @@ func (d *Core) GetRandomHosts(nHosts int) ([]string, error) {
 var cpuMetrics = kostyaInitCpuMetrics()
 
 func kostyaInitCpuMetrics() []string {
+	fmt.Print("[kostya-run] kostyaInitCpuMetrics start")
 	var i int64
 	var r = make([]string, common.KostyaNumFields)
 	for i = 0; i < common.KostyaNumFields; i++ {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
 		r = append(r, fieldName)
 	}
+	fmt.Printf("[kostya-run] kostyaInitCpuMetrics done. len = %d", len(r))
 	return r
 }
 

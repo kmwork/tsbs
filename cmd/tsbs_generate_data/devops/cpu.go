@@ -1,6 +1,7 @@
 package devops
 
 import (
+	"fmt"
 	"math/rand"
 	"strconv"
 	"time"
@@ -15,6 +16,7 @@ var (
 )
 
 func kostyaGenerateLabels() []common.LabeledDistributionMaker {
+	fmt.Print("[kostya-start2] kostyaGenerateLabels start")
 	var r = make([]common.LabeledDistributionMaker, common.KostyaNumFields)
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
@@ -24,6 +26,7 @@ func kostyaGenerateLabels() []common.LabeledDistributionMaker {
 		}
 		r = append(r, item)
 	}
+	fmt.Printf("[kostya-done2] kostyaGenerateLabels done, len = %d", len(r))
 	return r
 }
 
