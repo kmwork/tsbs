@@ -1,5 +1,5 @@
 #!/bin/bash
-set PATH=$PATH:/home/lin/go/bin
+export PATH=$PATH:/home/lin/go/bin
 # Ensure loader is available
 EXE_FILE_NAME=${EXE_FILE_NAME:-$(which tsbs_load_clickhouse)}
 if [[ -z "$EXE_FILE_NAME" ]]; then
@@ -11,7 +11,7 @@ fi
 DATA_FILE_NAME=cassandra-data-t1.gz
 DATABASE_USER=${DATABASE_USER:-default}
 DATABASE_PASSWORD=1
-BULK_DATA_DIR=/my-ext4
+export BULK_DATA_DIR=/my-ext4
 # Load parameters - personal
 PROGRESS_INTERVAL=${PROGRESS_INTERVAL:-10s}
 HASH_WORKERS=${HASH_WORKERS:-false}
