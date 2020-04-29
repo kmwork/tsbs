@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set PATH=$PATH:/home/lin/go/bin
 # Ensure loader is available
 EXE_FILE_NAME=${EXE_FILE_NAME:-$(which tsbs_load_clickhouse)}
 if [[ -z "$EXE_FILE_NAME" ]]; then
@@ -8,10 +8,10 @@ if [[ -z "$EXE_FILE_NAME" ]]; then
 fi
 
 # Load parameters - common
-DATA_FILE_NAME=${DATA_FILE_NAME:-clickhouse-data.gz}
+DATA_FILE_NAME=cassandra-data-t1.gz
 DATABASE_USER=${DATABASE_USER:-default}
-DATABASE_PASSWORD=${DATABASE_PASSWORD:-""}
-
+DATABASE_PASSWORD=1
+BULK_DATA_DIR=/my-ext4
 # Load parameters - personal
 PROGRESS_INTERVAL=${PROGRESS_INTERVAL:-10s}
 HASH_WORKERS=${HASH_WORKERS:-false}
@@ -25,6 +25,6 @@ cat ${DATA_FILE} | gunzip | $EXE_FILE_NAME \
                                 --password=${DATABASE_PASSWORD} \
                                 --db-name=${DATABASE_NAME} \
                                 --batch-size=${BATCH_SIZE} \
-                                --workers=${NUM_WORKERS} \
+                                --workers=4 \
                                 --reporting-period=${PROGRESS_INTERVAL} \
                                 --hash-workers=${HASH_WORKERS}
