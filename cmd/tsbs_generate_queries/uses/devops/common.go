@@ -2,6 +2,7 @@ package devops
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/uses/common"
@@ -67,9 +68,9 @@ func kostyaInitCpuMetrics() []string {
 	if len(hideCpuMetrics) > common.KostyaNumFields {
 		return hideCpuMetrics
 	}
-	var i int
+	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
-		hideCpuMetrics = append(hideCpuMetrics, "kostya_"+string(i))
+		hideCpuMetrics = append(hideCpuMetrics, "kostya_"+strconv.FormatInt(i, 10))
 	}
 	return hideCpuMetrics
 }

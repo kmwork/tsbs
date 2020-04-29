@@ -2,6 +2,7 @@ package devops
 
 import (
 	"math/rand"
+	"strconv"
 	"time"
 
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/common"
@@ -18,10 +19,10 @@ func kostyaGenerate() []common.LabeledDistributionMaker {
 	{
 
 	}
-	var i int
+	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
 		var item = common.LabeledDistributionMaker{
-			Label: []byte("kostya_" + string(i)), DistributionMaker: func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) },
+			Label: []byte("kostya_" + strconv.FormatInt(i, 10)), DistributionMaker: func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) },
 		}
 		r = append(r, item)
 	}
