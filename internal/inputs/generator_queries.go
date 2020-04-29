@@ -37,11 +37,6 @@ type DevopsGeneratorMaker interface {
 	NewDevops(start, end time.Time, scale int) (utils.QueryGenerator, error)
 }
 
-// IoTGeneratorMaker creates a quert generator for iot use case
-type IoTGeneratorMaker interface {
-	NewIoT(start, end time.Time, scale int) (utils.QueryGenerator, error)
-}
-
 // QueryGeneratorConfig is the GeneratorConfig that should be used with a
 // QueryGenerator. It includes all the fields from a BaseConfig, as well as
 // options that are specific to generating the queries to test against a
@@ -231,7 +226,7 @@ func (g *QueryGenerator) addFactory(database string, factory interface{}) error 
 	validFactory := false
 
 	switch factory.(type) {
-	case DevopsGeneratorMaker, IoTGeneratorMaker:
+	case DevopsGeneratorMaker:
 		validFactory = true
 	}
 
@@ -254,14 +249,6 @@ func (g *QueryGenerator) getUseCaseGenerator(c *QueryGeneratorConfig) (utils.Que
 	}
 
 	switch c.Use {
-	case useCaseIoT:
-		iotFactory, ok := factory.(IoTGeneratorMaker)
-
-		if !ok {
-			return nil, fmt.Errorf(errUseCaseNotImplementedFmt, c.Use, c.Format)
-		}
-
-		return iotFactory.NewIoT(g.tsStart, g.tsEnd, scale)
 	case useCaseDevops, useCaseCPUOnly, useCaseCPUSingle:
 		devopsFactory, ok := factory.(DevopsGeneratorMaker)
 		if !ok {
