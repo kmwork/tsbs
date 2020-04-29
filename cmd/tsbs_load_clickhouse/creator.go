@@ -180,9 +180,7 @@ func createTagsTable(db *sqlx.DB, tags []string) {
 		`,
 		cols,
 		index)
-	if debug > 0 {
-		fmt.Printf(sql)
-	}
+	log.Printf("[kostya-sql] " + sql)
 	_, err := db.Exec(sql)
 	if err != nil {
 		panic(err)
