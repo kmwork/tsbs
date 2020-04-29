@@ -157,10 +157,7 @@ func newHostMeasurements(start time.Time) []common.SimulatedMeasurement {
 		NewCPUMeasurement(start),
 		NewDiskMeasurement(start),
 		NewKernelMeasurement(start),
-		NewMemMeasurement(start),
 		NewNetMeasurement(start),
-		NewNginxMeasurement(start),
-		NewPostgresqlMeasurement(start),
 		NewRedisMeasurement(start),
 	}
 }
