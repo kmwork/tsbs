@@ -61,7 +61,7 @@ var cpuMetrics [common.KostyaNumFields]string
 
 // init cpuMetrics (c) kostya
 func init() {
-	log.Print("[kostya-run] kostyaInitCpuMetrics start")
+	log.Println("[kostya-run] kostyaInitCpuMetrics start")
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)

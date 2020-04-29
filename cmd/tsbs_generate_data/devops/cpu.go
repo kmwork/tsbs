@@ -16,7 +16,7 @@ var cpuFields [common.KostyaNumFields]common.LabeledDistributionMaker
 
 // for cpuFields generate (c) kostya
 func init() {
-	log.Print("[kostya-start2] kostyaGenerateLabels start")
+	log.Println("[kostya-start2] kostyaGenerateLabels start")
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
@@ -25,7 +25,7 @@ func init() {
 		}
 		cpuFields[i] = item
 	}
-	log.Printf("[kostya-done2] kostyaGenerateLabels done, len = %d", len(cpuFields))
+	log.Panicf("[kostya-done2] kostyaGenerateLabels done, len = %d", len(cpuFields))
 }
 
 // Reuse NormalDistributions as arguments to other distributions. This is

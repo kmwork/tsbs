@@ -58,7 +58,7 @@ func init() {
 }
 
 func main() {
-	log.Print("++++++++++++++++ START KOSTYA +++++++++++++++++++++++")
+	log.Println("++++++++++++++++ START KOSTYA +++++++++++++++++++++++")
 	if len(profileFile) > 0 {
 		defer startMemoryProfile(profileFile)()
 	}
