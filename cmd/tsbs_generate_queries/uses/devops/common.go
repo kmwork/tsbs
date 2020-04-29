@@ -68,7 +68,7 @@ func init() {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
 		cpuMetrics = append(cpuMetrics, fieldName)
 	}
-	log.Printf("[kostya-run] kostyaInitCpuMetrics done. len = %d", len(r))
+	log.Printf("[kostya-run] kostyaInitCpuMetrics done. len = %d", len(cpuMetrics))
 }
 
 // GetCPUMetricsSlice returns a subset of metrics for the CPU

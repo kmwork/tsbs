@@ -26,7 +26,7 @@ func init() {
 		}
 		cpuFields = append(cpuFields, item)
 	}
-	log.Printf("[kostya-done2] kostyaGenerateLabels done, len = %d", len(r))
+	log.Printf("[kostya-done2] kostyaGenerateLabels done, len = %d", len(cpuFields))
 }
 
 // Reuse NormalDistributions as arguments to other distributions. This is
