@@ -80,6 +80,7 @@ func init() {
 
 	host = viper.GetString("host")
 	user = viper.GetString("user")
+	port = viper.GetString("port")
 	password = viper.GetString("password")
 
 	logBatches = viper.GetBool("log-batches")
