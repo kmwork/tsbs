@@ -69,8 +69,6 @@ type Simulator interface {
 	Finished() bool
 	Next(*serialize.Point) bool
 	Fields() map[string][][]byte
-	TagKeys() [][]byte
-	TagTypes() []reflect.Type
 }
 
 // BaseSimulator generates data similar to truck readings.

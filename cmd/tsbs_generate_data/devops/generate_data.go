@@ -16,23 +16,7 @@ type DevopsSimulator struct {
 
 // Next advances a Point to the next state in the generator.
 func (d *DevopsSimulator) Next(p *serialize.Point) bool {
-	// switch to the next metric if needed
-	if d.hostIndex == uint64(len(d.hosts)) {
-		d.hostIndex = 0
-		d.simulatedMeasurementIndex++
-	}
-
-	if d.simulatedMeasurementIndex == len(d.hosts[0].SimulatedMeasurements) {
-		d.simulatedMeasurementIndex = 0
-
-		for i := 0; i < len(d.hosts); i++ {
-			d.hosts[i].TickAll(d.interval)
-		}
-
-		d.adjustNumHostsForEpoch()
-	}
-
-	return d.populatePoint(p, d.simulatedMeasurementIndex)
+	return false
 }
 
 // DevopsSimulatorConfig is used to create a DevopsSimulator.

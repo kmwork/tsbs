@@ -116,20 +116,6 @@ var (
 		"test",
 	}
 
-	// MachineTagKeys fields common to all hosts:
-	MachineTagKeys = [][]byte{
-		[]byte("hostname"),
-		[]byte("region"),
-		[]byte("datacenter"),
-		[]byte("rack"),
-		[]byte("os"),
-		[]byte("arch"),
-		[]byte("team"),
-		[]byte("service"),
-		[]byte("service_version"),
-		[]byte("service_environment"),
-	}
-
 	// machineTagType is the type of all the tags (string)
 	// to be used by TagTypes. Not used elsewhere.
 	machineTagType = reflect.TypeOf("some string")

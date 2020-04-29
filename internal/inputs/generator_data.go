@@ -6,7 +6,6 @@ import (
 	"io"
 	"math/rand"
 	"os"
-	"sort"
 	"time"
 
 	"github.com/spf13/pflag"
@@ -217,29 +216,4 @@ func (g *DataGenerator) getSerializer(sim common.Simulator, format string) (seri
 }
 
 func (g *DataGenerator) writeHeader(sim common.Simulator) {
-	g.bufOut.WriteString("tags")
-	types := sim.TagTypes()
-	for i, key := range sim.TagKeys() {
-		g.bufOut.WriteString(",")
-		g.bufOut.Write(key)
-		g.bufOut.WriteString(" ")
-		g.bufOut.WriteString(types[i].String())
-	}
-	g.bufOut.WriteString("\n")
-	// sort the keys so the header is deterministic
-	keys := make([]string, 0)
-	fields := sim.Fields()
-	for k := range fields {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	for _, measurementName := range keys {
-		g.bufOut.WriteString(measurementName)
-		for _, field := range fields[measurementName] {
-			g.bufOut.WriteString(",")
-			g.bufOut.Write(field)
-		}
-		g.bufOut.WriteString("\n")
-	}
-	g.bufOut.WriteString("\n")
 }

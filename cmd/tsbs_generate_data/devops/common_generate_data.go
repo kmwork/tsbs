@@ -1,7 +1,6 @@
 package devops
 
 import (
-	"reflect"
 	"time"
 
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/common"
@@ -54,18 +53,6 @@ func (s *commonDevopsSimulator) Fields() map[string][][]byte {
 	return s.fields(s.hosts[0].SimulatedMeasurements)
 }
 
-func (s *commonDevopsSimulator) TagKeys() [][]byte {
-	return MachineTagKeys
-}
-
-func (s *commonDevopsSimulator) TagTypes() []reflect.Type {
-	types := make([]reflect.Type, len(MachineTagKeys))
-	for i := 0; i < len(MachineTagKeys); i++ {
-		types[i] = machineTagType
-	}
-	return types
-}
-
 func (s *commonDevopsSimulator) fields(measurements []common.SimulatedMeasurement) map[string][][]byte {
 	data := make(map[string][][]byte)
 	for _, sm := range measurements {
@@ -75,30 +62,6 @@ func (s *commonDevopsSimulator) fields(measurements []common.SimulatedMeasuremen
 	}
 
 	return data
-}
-
-func (s *commonDevopsSimulator) populatePoint(p *serialize.Point, measureIdx int) bool {
-	host := &s.hosts[s.hostIndex]
-
-	// Populate host-specific tags:
-	p.AppendTag(MachineTagKeys[0], host.Name)
-	p.AppendTag(MachineTagKeys[1], host.Region)
-	p.AppendTag(MachineTagKeys[2], host.Datacenter)
-	p.AppendTag(MachineTagKeys[3], host.Rack)
-	p.AppendTag(MachineTagKeys[4], host.OS)
-	p.AppendTag(MachineTagKeys[5], host.Arch)
-	p.AppendTag(MachineTagKeys[6], host.Team)
-	p.AppendTag(MachineTagKeys[7], host.Service)
-	p.AppendTag(MachineTagKeys[8], host.ServiceVersion)
-	p.AppendTag(MachineTagKeys[9], host.ServiceEnvironment)
-
-	// Populate measurement-specific tags and fields:
-	host.SimulatedMeasurements[measureIdx].ToPoint(p)
-
-	ret := s.hostIndex < s.epochHosts
-	s.madePoints++
-	s.hostIndex++
-	return ret
 }
 
 // TODO(rrk) - Can probably turn this logic into a separate interface and implement other
