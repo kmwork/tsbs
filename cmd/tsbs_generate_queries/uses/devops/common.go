@@ -2,7 +2,6 @@ package devops
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"time"
 
@@ -61,13 +60,11 @@ var cpuMetrics [common.KostyaNumFields]string
 
 // init cpuMetrics (c) kostya
 func init() {
-	log.Println("[kostya-run] kostyaInitCpuMetrics start")
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
 		cpuMetrics[i] = fieldName
 	}
-	log.Printf("[kostya-run] kostyaInitCpuMetrics done. len = %d", len(cpuMetrics))
 }
 
 // GetCPUMetricsSlice returns a subset of metrics for the CPU
