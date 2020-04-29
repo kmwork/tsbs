@@ -61,16 +61,14 @@ var hideCpuMetrics = []string{
 	"usage_system",
 }
 
-var cpuMetrics = initCpuMetrics()
+var cpuMetrics = kostyaInitCpuMetrics()
 
-const KostyaNumFields = 5000
-
-func initCpuMetrics() []string {
-	if len(hideCpuMetrics) > KostyaNumFields {
+func kostyaInitCpuMetrics() []string {
+	if len(hideCpuMetrics) > common.KostyaNumFields {
 		return hideCpuMetrics
 	}
 	var i int
-	for i = 0; i < KostyaNumFields; i++ {
+	for i = 0; i < common.KostyaNumFields; i++ {
 		hideCpuMetrics = append(hideCpuMetrics, "kostya_"+string(i))
 	}
 	return hideCpuMetrics

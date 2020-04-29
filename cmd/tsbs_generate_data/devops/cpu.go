@@ -10,19 +10,23 @@ import (
 
 var (
 	labelCPU  = []byte("cpu") // heap optimization
-	cpuFields = []common.LabeledDistributionMaker{
-		{[]byte("usage_user"), func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) }},
-		{[]byte("usage_system"), func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) }},
-		{[]byte("usage_idle"), func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) }},
-		{[]byte("usage_nice"), func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) }},
-		{[]byte("usage_iowait"), func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) }},
-		{[]byte("usage_irq"), func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) }},
-		{[]byte("usage_softirq"), func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) }},
-		{[]byte("usage_steal"), func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) }},
-		{[]byte("usage_guest"), func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) }},
-		{[]byte("usage_guest_nice"), func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) }},
-	}
+	cpuFields = kostyaGenerate()
 )
+
+func kostyaGenerate() []common.LabeledDistributionMaker {
+	var r []common.LabeledDistributionMaker
+	{
+
+	}
+	var i int
+	for i = 0; i < common.KostyaNumFields; i++ {
+		var item = common.LabeledDistributionMaker{
+			Label: []byte("kostya_" + string(i)), DistributionMaker: func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) },
+		}
+		r = append(r, item)
+	}
+	return r
+}
 
 // Reuse NormalDistributions as arguments to other distributions. This is
 // safe to do because the higher-level distribution advances the ND and
