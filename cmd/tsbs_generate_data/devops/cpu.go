@@ -10,10 +10,8 @@ import (
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/serialize"
 )
 
-var (
-	labelCPU  = []byte("cpu") // heap optimization
-	cpuFields = kostyaGenerateLabels()
-)
+var labelCPU = []byte("cpu") // heap optimization
+var cpuFields = kostyaGenerateLabels()
 
 func kostyaGenerateLabels() []common.LabeledDistributionMaker {
 	fmt.Print("[kostya-start2] kostyaGenerateLabels start")
@@ -40,6 +38,7 @@ type CPUMeasurement struct {
 }
 
 func NewCPUMeasurement(start time.Time) *CPUMeasurement {
+	fmt.Printf("[kostya-start3] NewCPUMeasurement start")
 	return newCPUMeasurementNumDistributions(start, len(cpuFields))
 }
 
@@ -48,6 +47,7 @@ func newSingleCPUMeasurement(start time.Time) *CPUMeasurement {
 }
 
 func newCPUMeasurementNumDistributions(start time.Time, numDistributions int) *CPUMeasurement {
+	fmt.Printf("[kostya-start4] newCPUMeasurementNumDistributions start")
 	sub := common.NewSubsystemMeasurementWithDistributionMakers(start, cpuFields[:numDistributions])
 	return &CPUMeasurement{sub}
 }
