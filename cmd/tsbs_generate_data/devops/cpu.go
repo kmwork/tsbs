@@ -15,10 +15,7 @@ var (
 )
 
 func kostyaGenerate() []common.LabeledDistributionMaker {
-	var r []common.LabeledDistributionMaker
-	{
-
-	}
+	var r = make([]common.LabeledDistributionMaker, common.KostyaNumFields)
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
 		var item = common.LabeledDistributionMaker{

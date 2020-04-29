@@ -56,23 +56,15 @@ func (d *Core) GetRandomHosts(nHosts int) ([]string, error) {
 	return getRandomHosts(nHosts, d.Scale)
 }
 
-// cpuMetrics is the list of metric names for CPU
-var hideCpuMetrics = []string{
-	"kostya_0",
-	"usage_system",
-}
-
 var cpuMetrics = kostyaInitCpuMetrics()
 
 func kostyaInitCpuMetrics() []string {
-	if len(hideCpuMetrics) > common.KostyaNumFields {
-		return hideCpuMetrics
-	}
 	var i int64
+	var r = make([]string, common.KostyaNumFields)
 	for i = 0; i < common.KostyaNumFields; i++ {
-		hideCpuMetrics = append(hideCpuMetrics, "kostya_"+strconv.FormatInt(i, 10))
+		r = append(r, "kostya_"+strconv.FormatInt(i, 10))
 	}
-	return hideCpuMetrics
+	return r
 }
 
 // GetCPUMetricsSlice returns a subset of metrics for the CPU
