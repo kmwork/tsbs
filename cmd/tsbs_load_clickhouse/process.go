@@ -79,8 +79,8 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 
 	tx := p.db.MustBegin()
 	stmt, err := tx.Prepare(sql)
-	var rowCount int = len(rows)
-	var rowIndex int
+	var rowCount int64 = int64(len(rows))
+	var rowIndex int64
 	for rowIndex = 0; rowIndex < rowCount; rowIndex++ {
 		var strFields = rows[rowIndex].fields
 		var metrics []string = strings.Split(strFields, ",")
