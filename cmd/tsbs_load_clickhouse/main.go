@@ -66,7 +66,6 @@ func init() {
 	pflag.Bool("hash-workers", false, "Whether to consistently hash insert data to the same workers (i.e., the data for a particular host always goes to the same worker)")
 
 	pflag.Int("debug", 2, "Debug printing (choices: 0, 1, 2). (default 2)")
-	pflag.Int64("KostyaColumnCounter", 5000, "[Kostya-Author] size ('width') of table 'CPU' (default 5000)")
 	pflag.Parse()
 
 	err := utils.SetupConfigFile()
