@@ -18,8 +18,10 @@ type dbCreator struct {
 
 // loader.DBCreator interface implementation
 func (d *dbCreator) Init() {
+	log.Println("[DB-Creator:Init] start")
 	br := loader.GetBufferedReader()
 	d.readDataHeader(br)
+	log.Println("[DB-Creator:Init] done")
 }
 
 // readDataHeader fills dbCreator struct with data structure (tables description)
@@ -42,7 +44,7 @@ func (d *dbCreator) readDataHeader(br *bufio.Reader) {
 	for {
 		var err error
 		var line string
-		log.Printf("read, index = %d, line = %s", i, line)
+		log.Printf("read, index = %d", i)
 		if i == 0 {
 			// read first line - list of tags
 			d.tags, err = br.ReadString('\n')
@@ -51,6 +53,7 @@ func (d *dbCreator) readDataHeader(br *bufio.Reader) {
 				fatal("input has wrong header format: %v", err)
 			}
 			d.tags = strings.TrimSpace(d.tags)
+			log.Printf("read, index = %d, tags = %s", i, d.tags)
 		} else {
 			// read the second and further lines - metrics descriptions
 			line, err = br.ReadString('\n')
@@ -66,6 +69,7 @@ func (d *dbCreator) readDataHeader(br *bufio.Reader) {
 			}
 			// append new table/columns set to the list of tables/columns set
 			d.cols = append(d.cols, line)
+			log.Printf("read, index = %d, cols = %v", i, d.cols)
 		}
 		i++
 	}
@@ -192,9 +196,7 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 			`,
 		tableName,
 		strings.Join(columnsWithType, ","))
-	if debug > 0 {
-		fmt.Printf(sql)
-	}
+	log.Printf("[SQL:createMetricsTable] sql= %s", sql)
 	_, err := db.Exec(sql)
 	if err != nil {
 		panic(err)
