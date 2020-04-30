@@ -42,11 +42,12 @@ func (d *dbCreator) readDataHeader(br *bufio.Reader) {
 	for {
 		var err error
 		var line string
-
+		log.Printf("read, index = %d, line = %s", i, line)
 		if i == 0 {
 			// read first line - list of tags
 			d.tags, err = br.ReadString('\n')
 			if err != nil {
+				log.Printf("start file , index = %d", i)
 				fatal("input has wrong header format: %v", err)
 			}
 			d.tags = strings.TrimSpace(d.tags)
@@ -54,9 +55,11 @@ func (d *dbCreator) readDataHeader(br *bufio.Reader) {
 			// read the second and further lines - metrics descriptions
 			line, err = br.ReadString('\n')
 			if err != nil {
+				log.Printf("next line , index = %d", i)
 				fatal("input has wrong header format: %v", err)
 			}
 			line = strings.TrimSpace(line)
+			log.Printf("index = %d, line = %s", i, line)
 			if len(line) == 0 {
 				// empty line - end of header
 				break
@@ -125,12 +128,6 @@ func (d *dbCreator) CreateDB(dbName string) error {
 	// 1:
 	// N: actual tags
 	// so we'll use tags[1:] for tags specification
-	parts := strings.Split(strings.TrimSpace(d.tags), ",")
-	if parts[0] != "tags" {
-		return fmt.Errorf("input header in wrong format. got '%s', expected 'tags'", parts[0])
-	}
-	createTagsTable(db, parts[1:])
-	tableCols["tags"] = parts[1:]
 
 	// d.cols content are lines (metrics descriptions) as:
 	// cpu,usage_user,usage_system,usage_idle,usage_nice,usage_iowait,usage_irq,usage_softirq,usage_steal,usage_guest,usage_guest_nice
@@ -148,44 +145,12 @@ func (d *dbCreator) CreateDB(dbName string) error {
 }
 
 func (d *dbCreator) PostCreateDB(dbName string) error {
-	parts := strings.Split(strings.TrimSpace(d.tags), ",")
-	tableCols["tags"] = parts[1:]
-
 	for _, cols := range d.cols {
 		parts := strings.Split(strings.TrimSpace(cols), ",")
 		tableCols[parts[0]] = parts[1:]
 	}
 
 	return nil
-}
-
-// createTagsTable builds CREATE TABLE SQL statement and runs it
-func createTagsTable(db *sqlx.DB, tags []string) {
-	// prepare COLUMNs specification for CREATE TABLE statement
-	// all columns would be of type String
-	cols := strings.Join(tags, " String,\n ")
-	cols += " String\n"
-
-	// index would be on all fields
-	//index := strings.Join(tags, ","	)
-	index := "id"
-
-	sql := fmt.Sprintf(`
-		CREATE TABLE IF NOT EXISTS tags(
-			created_date Date     DEFAULT today(),
-			created_at   DateTime DEFAULT now(),
-			id           UInt32,
-			%s
-		) ENGINE = MergeTree(created_date, (%s), 8192)
-		`,
-		cols,
-		index)
-	log.Printf("[kostya-sql] " + sql)
-	_, err := db.Exec(sql)
-	if err != nil {
-		panic(err)
-	}
-	truncateTable(db, "tags")
 }
 
 // createMetricsTable builds CREATE TABLE SQL statement and runs it
@@ -201,12 +166,6 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 
 	// We'll have some service columns in table to be created and columnNames contains all column names to be created
 	columnNames := []string{}
-
-	if inTableTag {
-		// First column in the table - service column - partitioning field
-		partitioningColumn := tableCols["tags"][0] // would be 'hostname'
-		columnNames = append(columnNames, partitioningColumn)
-	}
 
 	// Add all column names from tableSpec into columnNames
 	columnNames = append(columnNames, tableSpec[1:]...)
@@ -225,9 +184,8 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 			CREATE TABLE IF NOT EXISTS %s (
 				created_date    Date     DEFAULT today(),
 				created_at      DateTime DEFAULT now() Codec(DoubleDelta, ZSTD),
-				tags_id         UInt32,
-				%s,
-				additional_tags String   DEFAULT ''
+				tags_id         UInt32 AUTO_INCREMENT,
+				%s
 			) ENGINE = MergeTree(created_date, (tags_id, created_at), 8192)
 			`,
 		tableName,

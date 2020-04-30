@@ -6,6 +6,7 @@ import (
 	"io"
 	"math/rand"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/spf13/pflag"
@@ -216,4 +217,12 @@ func (g *DataGenerator) getSerializer(sim common.Simulator, format string) (seri
 }
 
 func (g *DataGenerator) writeHeader(sim common.Simulator) {
+	g.bufOut.WriteString("cpu")
+	var i int64
+	for i = 0; i < common.KostyaNumFields; i++ {
+		g.bufOut.WriteString(",kostya_")
+		g.bufOut.WriteString(strconv.FormatInt(i, 10))
+	}
+	g.bufOut.WriteString(" \n")
+	g.bufOut.WriteString(" \n")
 }

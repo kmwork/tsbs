@@ -28,15 +28,15 @@ var (
 	password string
 
 	logBatches  bool
-	inTableTag  bool
 	hashWorkers bool
 
 	debug int
 )
 
+const inTableTag = true
+
 // String values of tags and fields to insert - string representation
 type insertData struct {
-	tags   string // hostname=host_0,region=eu-west-1,datacenter=eu-west-1b,rack=67,os=Ubuntu16.10,arch=x86,team=NYC,service=7,service_version=0,service_environment=production
 	fields string // 1451606400000000000,58,2,24,61,22,63,6,44,80,38
 }
 

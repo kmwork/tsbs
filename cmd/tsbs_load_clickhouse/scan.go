@@ -15,10 +15,7 @@ type hostnameIndexer struct {
 
 // scan.PointIndexer interface implementation
 func (i *hostnameIndexer) GetIndex(item *load.Point) int {
-	p := item.Data.(*point)
-	hostname := strings.SplitN(p.row.tags, ",", 2)[0]
 	h := fnv.New32a()
-	h.Write([]byte(hostname))
 	return int(h.Sum32()) % int(i.partitions)
 }
 
@@ -93,8 +90,6 @@ func (d *decoder) Decode(_ *bufio.Reader) *load.Point {
 		fatal("data file in invalid format; got %s expected %s", prefix, tagsPrefix)
 		return nil
 	}
-	data.tags = parts[1]
-
 	// Scan again to get the data line
 	// cpu,1451606400000000000,58,2,24,61,22,63,6,44,80,38
 	ok = d.scanner.Scan()
