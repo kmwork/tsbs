@@ -4,5 +4,5 @@ clear
     --timestamp-start="2020-04-01T00:00:00Z" \
     --timestamp-end="2020-04-01T00:01:00Z" \
     --log-interval="30s" --format="clickhouse" \
-    --KostyaColumnCounter=15000
+    --KostyaColumnCounter=15000 \
     | gzip > /my-ext4/yandex-data-t4.gz
