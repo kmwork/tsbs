@@ -51,89 +51,7 @@ func subsystemTagsToJSON(tags []string) string {
 // Process part of incoming data - insert into tables
 func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	log.Printf("[Insert:SQL] tableName = %s", tableName)
-	dataRows := make([][]interface{}, 0, len(rows))
 	ret := uint64(0)
-	colLen := common.KostyaNumFields
-	var tagsIdPosition int = 0
-
-	for _, data := range rows {
-		// Split the tags into individual common tags and
-		// an extra bit leftover for non-common tags that need to be added separately.
-		// For each of the common tags, remove everything after = in the form <label>=<val>
-		// since we won't need it.
-		// tags line ex.:
-		// hostname=host_0,region=eu-west-1,datacenter=eu-west-1b,rack=67,os=Ubuntu16.10,arch=x86,team=NYC,service=7,service_version=0,service_environment=production
-		// tags = (
-		//	hostname=host_0
-		//	region=eu-west-1
-		//	datacenter=eu-west-1b
-		// )
-		// extract value of each tag
-		// tags = (
-		//	host_0
-		//	eu-west-1
-		//	eu-west-1b
-		// )
-		// prepare JSON for tags that are not common
-
-		// fields line ex.:
-		// 1451606400000000000,58,2,24,61,22,63,6,44,80,38
-		metrics := strings.Split(data.fields, ",")
-
-		// Count number of metrics processed
-		ret += uint64(len(metrics) - 1) // 1-st field is timestamp, do not count it
-		// metrics = (
-		// 	1451606400000000000,
-		// 	58,
-		// )
-
-		// use nil at 2-nd position as placeholder for tagKey
-		r := make([]interface{}, 0, colLen)
-		// First columns in table are
-		// created_date
-		// created_at
-		// time
-		// tags_id - would be nil for now
-		// additional_tags
-		tagsIdPosition = 3 // what is the position of the tags_id in the row - nil value
-		for _, v := range metrics[1:] {
-			if v == "" {
-				r = append(r, nil)
-				continue
-			}
-			f64, err := strconv.ParseFloat(v, 64)
-			if err != nil {
-				panic(err)
-			}
-			r = append(r, f64)
-		}
-
-		dataRows = append(dataRows, r)
-		log.Printf("[Insert:SQL] row = %v", r)
-		log.Println("---------------------------")
-	}
-
-	// Check if any of these tags has yet to be inserted
-	// New tags in this batch, need to be inserted
-	p.csi.mutex.RLock()
-	p.csi.mutex.RUnlock()
-
-	// Deal with tag ids for each data row
-	p.csi.mutex.RLock()
-	var cols [common.KostyaNumFields]string
-	var iField int64 = 0
-	for i := range dataRows {
-		// tagKey = hostname
-		tagKey := "kostya_" + strconv.FormatInt(iField, 10)
-		cols[i] = tagKey
-		// Insert id of the tag (tags.id) for this host into tags_id position of the dataRows record
-		// refers to
-		// nil,		// tags_id
-
-		dataRows[i][tagsIdPosition] = p.csi.m[tagKey]
-		iField++
-	}
-	p.csi.mutex.RUnlock()
 
 	// Prepare column names
 	// First columns would be "created_date", "created_at", "time", "tags_id", "additional_tags"
@@ -142,7 +60,12 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	// and it is easier to keep variable coumns at the end of the list
 
 	// INSERT statement template
-	sql := fmt.Sprintf(`
+	var cols [common.KostyaNumFields]string
+	var i int64
+	for i = 0; i < common.KostyaNumFields; i++ {
+		cols[i] = "kostya_" + strconv.FormatInt(i, 10)
+	}
+	var sql = fmt.Sprintf(`
 		INSERT INTO %s (
 			%s
 		) VALUES (
@@ -156,9 +79,22 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	log.Printf("[SQL:Script] sql = %s", sql)
 	tx := p.db.MustBegin()
 	stmt, err := tx.Prepare(sql)
-	for _, r := range dataRows {
-		log.Printf("[SQL:Value] r = %v", r)
-		_, err := stmt.Exec(r...)
+	var rowCount int = len(rows)
+	var rowIndex int
+	for rowIndex = 0; rowIndex < rowCount; rowIndex++ {
+		var strFields = rows[rowIndex].fields
+		var metrics []string = strings.Split(strFields, ",")
+		var fieldIndex int64
+		var values [common.KostyaNumFields]float64
+		for fieldIndex = 0; fieldIndex < common.KostyaNumFields; fieldIndex++ {
+			f64, err := strconv.ParseFloat(metrics[fieldIndex], 64)
+			if err != nil {
+				panic(err)
+			}
+			values[fieldIndex] = f64
+		}
+		log.Printf("[SQL:Value] value = %v, len(value)= %d", values, len(values))
+		_, err := stmt.Exec(values)
 		if err != nil {
 			panic(err)
 		}
