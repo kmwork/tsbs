@@ -66,7 +66,7 @@ func (m *SubsystemMeasurement) ToPointAllInt64(p *serialize.Point, measurementNa
 	counterToPointAllInt64++
 	var countThMod float64 = math.Mod(float64(counterToPointAllInt64), 1000)
 	if countThMod < 0.0001 {
-		log.Printf("[measurement.go: ToPointAllInt64] done, counter = %f", counterToPointAllInt64)
+		log.Printf("[measurement.go: ToPointAllInt64] done, counter = %d", counterToPointAllInt64)
 	}
 }
 
