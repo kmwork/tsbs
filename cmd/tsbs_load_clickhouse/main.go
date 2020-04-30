@@ -65,8 +65,8 @@ func init() {
 	// TODO - This flag could potentially be done as a string/enum with other options besides no-hash, round-robin, etc
 	pflag.Bool("hash-workers", false, "Whether to consistently hash insert data to the same workers (i.e., the data for a particular host always goes to the same worker)")
 
-	pflag.Int("debug", 0, "Debug printing (choices: 0, 1, 2). (default 0)")
-
+	pflag.Int("debug", 2, "Debug printing (choices: 0, 1, 2). (default 2)")
+	pflag.Int64("KostyaColumnCounter", 5000, "[Kostya-Author] size ('width') of table 'CPU' (default 5000)")
 	pflag.Parse()
 
 	err := utils.SetupConfigFile()
@@ -90,6 +90,8 @@ func init() {
 
 	loader = load.GetBenchmarkRunner(config)
 	tableCols = make(map[string][]string)
+
+	log.Printf("[INIT:CONFIG] config =%+v", config)
 }
 
 // loader.Benchmark interface implementation

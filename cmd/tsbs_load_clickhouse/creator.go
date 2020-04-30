@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/timescale/tsbs/load"
 	"log"
 	"math"
 	"strings"
@@ -167,26 +168,17 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 	tableName := tableSpec[0]
 	tableCols[tableName] = tableSpec[1:]
 
-	// We'll have some service columns in table to be created and columnNames contains all column names to be created
-	columnNames := []string{}
-
-	// Add all column names from tableSpec into columnNames
-	columnNames = append(columnNames, tableSpec[1:]...)
-
 	// columnsWithType - column specifications with type. Ex.: "cpu_usage Float64"
-	columnsWithType := []string{}
-	for _, column := range columnNames {
-		if len(column) == 0 {
-			// Skip nameless columns
-			continue
-		}
-		columnsWithType = append(columnsWithType, fmt.Sprintf("%s Float64", column))
+	var columnsWithType []string = make([]string, load.KostyaColumnCounter())
+	var i int64
+	for i = 0; i < load.KostyaColumnCounter(); i++ {
+		columnsWithType[i] = tableSpec[i+1] + " Float64"
 	}
 
 	sql := fmt.Sprintf(`
 			CREATE TABLE IF NOT EXISTS %s (
 				created_date    Date     DEFAULT today(),
-				created_at      DateTime DEFAULT now() Codec(DoubleDelta, ZSTD),
+				created_at      DateTime DEFAULT now(),
 				id		        UInt64,
 				%s
 			) ENGINE = MergeTree(created_date, (id, created_at), 8192)
