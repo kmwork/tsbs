@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/common"
 	"log"
+	"math"
 	"strconv"
 	"strings"
 	"sync"
@@ -82,6 +83,9 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	var rowCount int64 = int64(len(rows))
 	var rowIndex int64
 	for rowIndex = 0; rowIndex < rowCount; rowIndex++ {
+		if math.Mod(float64(rowIndex*100), float64(rowCount)) < 1 {
+			log.Printf("Insert by rowIndex = %d, totalRows = %d", rowIndex, rowCount)
+		}
 		var strFields = rows[rowIndex].fields
 		var metrics []string = strings.Split(strFields, ",")
 		var fieldIndex int64
@@ -94,7 +98,6 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 			}
 			values[fieldIndex+1] = f64
 		}
-		log.Printf("[SQL:Value] len(value)= %d", len(values))
 		_, err := stmt.Exec(values[:]...)
 		if err != nil {
 			panic(err)
