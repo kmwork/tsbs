@@ -13,6 +13,7 @@ import (
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/common"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/devops"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/serialize"
+	"github.com/timescale/tsbs/load"
 )
 
 // Error messages when using a DataGenerator
@@ -70,7 +71,6 @@ func (c *DataGeneratorConfig) AddToFlagSet(fs *pflag.FlagSet) {
 		"Group (0-indexed) to perform round-robin serialization within. Use this to scale up data generation to multiple processes.")
 	fs.Uint("interleaved-generation-groups", 1,
 		"The number of round-robin serialization groups. Use this to scale up data generation to multiple processes.")
-
 }
 
 // DataGenerator is a type of Generator for creating data that will be consumed
@@ -220,7 +220,7 @@ func (g *DataGenerator) writeHeader(sim common.Simulator) {
 	g.bufOut.WriteString("cpu\n")
 	g.bufOut.WriteString("cpu")
 	var i int64
-	for i = 0; i < common.KostyaNumFields; i++ {
+	for i = 0; i < load.KostyaColumnCounter(); i++ {
 		g.bufOut.WriteString(",kostya_")
 		g.bufOut.WriteString(strconv.FormatInt(i, 10))
 	}

@@ -14,8 +14,6 @@ const (
 	errMoreItemsThanScale = "cannot get random permutation with more items than scale"
 )
 
-const KostyaNumFields int64 = 5000
-
 // Core is the common component of all generators for all systems
 type Core struct {
 	// Interval is the entire time range of the dataset

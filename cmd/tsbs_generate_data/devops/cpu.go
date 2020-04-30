@@ -7,15 +7,20 @@ import (
 
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/common"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/serialize"
+	"github.com/timescale/tsbs/load"
 )
 
 var labelCPU = []byte("cpu") // heap optimization
-var cpuFields [common.KostyaNumFields]common.LabeledDistributionMaker
+var cpuFields []common.LabeledDistributionMaker
+
+func init() {
+	cpuFields = make([]common.LabeledDistributionMaker, load.KostyaColumnCounter())
+}
 
 // for cpuFields generate (c) kostya
 func init() {
 	var i int64
-	for i = 0; i < common.KostyaNumFields; i++ {
+	for i = 0; i < load.KostyaColumnCounter(); i++ {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
 		var item = common.LabeledDistributionMaker{
 			Label: []byte(fieldName), DistributionMaker: func() common.Distribution { return common.CWD(cpuND, 0.0, 100.0, rand.Float64()*100.0) },

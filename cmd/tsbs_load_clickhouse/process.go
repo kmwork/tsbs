@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/timescale/tsbs/cmd/tsbs_generate_data/common"
 	"log"
 	"math"
 	"strconv"
@@ -61,10 +60,10 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	// and it is easier to keep variable coumns at the end of the list
 
 	// INSERT statement template
-	var cols [common.KostyaNumFields + 1]string
+	var cols []string = make([]string, load.KostyaColumnCounter()+1)
 	var i int64
 	cols[0] = "id"
-	for i = 0; i < common.KostyaNumFields; i++ {
+	for i = 0; i < load.KostyaColumnCounter(); i++ {
 		cols[i+1] = "kostya_" + strconv.FormatInt(i, 10)
 	}
 	var sql = fmt.Sprintf(`
@@ -89,9 +88,9 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		var strFields = rows[rowIndex].fields
 		var metrics []string = strings.Split(strFields, ",")
 		var fieldIndex int64
-		var values [common.KostyaNumFields + 1]interface{}
+		var values []interface{} = make([]interface{}, load.KostyaColumnCounter()+1)
 		values[0] = rowIndex
-		for fieldIndex = 0; fieldIndex < common.KostyaNumFields; fieldIndex++ {
+		for fieldIndex = 0; fieldIndex < load.KostyaColumnCounter(); fieldIndex++ {
 			f64, err := strconv.ParseFloat(metrics[fieldIndex], 64)
 			if err != nil {
 				panic(err)

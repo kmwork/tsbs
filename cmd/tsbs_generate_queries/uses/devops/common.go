@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/uses/common"
+	"github.com/timescale/tsbs/load"
 	"github.com/timescale/tsbs/query"
 )
 
@@ -56,12 +57,16 @@ func (d *Core) GetRandomHosts(nHosts int) ([]string, error) {
 	return getRandomHosts(nHosts, d.Scale)
 }
 
-var cpuMetrics [common.KostyaNumFields]string
+var cpuMetrics []string
+
+func init() {
+	cpuMetrics = make([]string, load.KostyaColumnCounter())
+}
 
 // init cpuMetrics (c) kostya
 func init() {
 	var i int64
-	for i = 0; i < common.KostyaNumFields; i++ {
+	for i = 0; i < load.KostyaColumnCounter(); i++ {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
 		cpuMetrics[i] = fieldName
 	}

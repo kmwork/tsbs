@@ -16,5 +16,3 @@ func RandomByteStringSliceChoice(s [][]byte) []byte {
 func RandomInt64SliceChoice(s []int64) int64 {
 	return s[rand.Intn(len(s))]
 }
-
-const KostyaNumFields int64 = 5000
