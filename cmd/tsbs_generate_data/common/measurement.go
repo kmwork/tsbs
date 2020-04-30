@@ -2,6 +2,7 @@ package common
 
 import (
 	"log"
+	"math"
 	"time"
 
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/serialize"
@@ -49,7 +50,7 @@ func (m *SubsystemMeasurement) ToPoint(p *serialize.Point, measurementName []byt
 	}
 }
 
-var counerToPointAllInt64 int64 = 0
+var counterToPointAllInt64 int64 = 0
 
 // ToPointAllInt64 fills in a serialize.Point with a given measurementName and
 // all vales from the distributions stored as int64. The labels for each field
@@ -62,8 +63,11 @@ func (m *SubsystemMeasurement) ToPointAllInt64(p *serialize.Point, measurementNa
 	for i, d := range m.Distributions {
 		p.AppendField(labels[i].Label, int64(d.Get()))
 	}
-	counerToPointAllInt64++
-	log.Printf("[measurement.go: ToPointAllInt64] done, couter = %d", counerToPointAllInt64)
+	counterToPointAllInt64++
+	var countThMod float64 = math.Mod(float64(counterToPointAllInt64), 1000)
+	if countThMod < 0.0001 {
+		log.Printf("[measurement.go: ToPointAllInt64] done, counter = %f", counterToPointAllInt64)
+	}
 }
 
 // LabeledDistributionMaker combines a distribution maker with a label.

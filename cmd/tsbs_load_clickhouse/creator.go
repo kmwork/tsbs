@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"math"
 	"strings"
 
 	"github.com/jmoiron/sqlx"
@@ -44,16 +45,16 @@ func (d *dbCreator) readDataHeader(br *bufio.Reader) {
 	for {
 		var err error
 		var line string
-		log.Printf("read, index = %d", i)
+		if math.Mod(float64(i), 1000) < 0.001 {
+			log.Printf("read, index = %d", i)
+		}
 		if i == 0 {
 			// read first line - list of tags
 			d.tags, err = br.ReadString('\n')
 			if err != nil {
-				log.Printf("start file , index = %d", i)
 				fatal("input has wrong header format: %v", err)
 			}
 			d.tags = strings.TrimSpace(d.tags)
-			log.Printf("read, index = %d, tags = %s", i, d.tags)
 		} else {
 			// read the second and further lines - metrics descriptions
 			line, err = br.ReadString('\n')
@@ -62,14 +63,12 @@ func (d *dbCreator) readDataHeader(br *bufio.Reader) {
 				fatal("input has wrong header format: %v", err)
 			}
 			line = strings.TrimSpace(line)
-			log.Printf("index = %d, line = %s", i, line)
 			if len(line) == 0 {
 				// empty line - end of header
 				break
 			}
 			// append new table/columns set to the list of tables/columns set
 			d.cols = append(d.cols, line)
-			log.Printf("read, index = %d, cols = %v", i, d.cols)
 		}
 		i++
 	}
