@@ -29,4 +29,5 @@ cat ${DATA_FILE} | gunzip | $EXE_FILE_NAME \
                                 --batch-size=${BATCH_SIZE} \
                                 --workers=1 \
                                 --reporting-period=${PROGRESS_INTERVAL} \
+                                --KostyaColumnCounter=15000 \
                                 --hash-workers=${HASH_WORKERS}
