@@ -55,6 +55,8 @@ func init() {
 	}
 
 	profileFile = viper.GetString("profile-file")
+
+	log.Printf("[INIT:CONFIG-Generate] config =%+v", config)
 }
 
 func main() {
