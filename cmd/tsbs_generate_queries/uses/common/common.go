@@ -2,11 +2,11 @@ package common
 
 import (
 	"fmt"
+	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/utils"
 	"math/rand"
 	"reflect"
 	"time"
 
-	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/utils"
 	internalutils "github.com/timescale/tsbs/internal/utils"
 )
 

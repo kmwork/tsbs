@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/timescale/tsbs/load"
+	"github.com/timescale/tsbs/internal/utils"
 	"log"
 	"math"
 	"strings"
@@ -169,9 +169,9 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 	tableCols[tableName] = tableSpec[1:]
 
 	// columnsWithType - column specifications with type. Ex.: "cpu_usage Float64"
-	var columnsWithType []string = make([]string, load.KostyaColumnCounter())
+	var columnsWithType []string = make([]string, utils.KostyaColumnCounter())
 	var i int64
-	for i = 0; i < load.KostyaColumnCounter(); i++ {
+	for i = 0; i < utils.KostyaColumnCounter(); i++ {
 		columnsWithType[i] = tableSpec[i+1] + " Float64"
 	}
 

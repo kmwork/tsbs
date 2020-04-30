@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/timescale/tsbs/internal/utils"
 	"log"
 	"math"
 	"strconv"
@@ -60,10 +61,10 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	// and it is easier to keep variable coumns at the end of the list
 
 	// INSERT statement template
-	var cols []string = make([]string, load.KostyaColumnCounter()+1)
+	var cols []string = make([]string, utils.KostyaColumnCounter()+1)
 	var i int64
 	cols[0] = "id"
-	for i = 0; i < load.KostyaColumnCounter(); i++ {
+	for i = 0; i < utils.KostyaColumnCounter(); i++ {
 		cols[i+1] = "kostya_" + strconv.FormatInt(i, 10)
 	}
 	var sql = fmt.Sprintf(`
@@ -88,9 +89,9 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		var strFields = rows[rowIndex].fields
 		var metrics []string = strings.Split(strFields, ",")
 		var fieldIndex int64
-		var values []interface{} = make([]interface{}, load.KostyaColumnCounter()+1)
+		var values []interface{} = make([]interface{}, utils.KostyaColumnCounter()+1)
 		values[0] = rowIndex
-		for fieldIndex = 0; fieldIndex < load.KostyaColumnCounter(); fieldIndex++ {
+		for fieldIndex = 0; fieldIndex < utils.KostyaColumnCounter(); fieldIndex++ {
 			f64, err := strconv.ParseFloat(metrics[fieldIndex], 64)
 			if err != nil {
 				panic(err)

@@ -3,6 +3,7 @@ package inputs
 import (
 	"bufio"
 	"fmt"
+	"github.com/timescale/tsbs/internal/utils"
 	"io"
 	"math/rand"
 	"os"
@@ -13,7 +14,6 @@ import (
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/common"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/devops"
 	"github.com/timescale/tsbs/cmd/tsbs_generate_data/serialize"
-	"github.com/timescale/tsbs/load"
 )
 
 // Error messages when using a DataGenerator
@@ -220,7 +220,7 @@ func (g *DataGenerator) writeHeader(sim common.Simulator) {
 	g.bufOut.WriteString("cpu\n")
 	g.bufOut.WriteString("cpu")
 	var i int64
-	for i = 0; i < load.KostyaColumnCounter(); i++ {
+	for i = 0; i < utils.KostyaColumnCounter(); i++ {
 		g.bufOut.WriteString(",kostya_")
 		g.bufOut.WriteString(strconv.FormatInt(i, 10))
 	}

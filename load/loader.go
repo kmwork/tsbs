@@ -56,17 +56,16 @@ type Benchmark interface {
 
 // BenchmarkRunnerConfig contains all the configuration information required for running BenchmarkRunner.
 type BenchmarkRunnerConfig struct {
-	DBName              string        `mapstructure:"db-name"`
-	BatchSize           uint          `mapstructure:"batch-size"`
-	Workers             uint          `mapstructure:"workers"`
-	Limit               uint64        `mapstructure:"limit"`
-	DoLoad              bool          `mapstructure:"do-load"`
-	DoCreateDB          bool          `mapstructure:"do-create-db"`
-	DoAbortOnExist      bool          `mapstructure:"do-abort-on-exist"`
-	ReportingPeriod     time.Duration `mapstructure:"reporting-period"`
-	FileName            string        `mapstructure:"file"`
-	Seed                int64         `mapstructure:"seed"`
-	KostyaColumnCounter int64         `mapstructure:"KostyaColumnCounter"`
+	DBName          string        `mapstructure:"db-name"`
+	BatchSize       uint          `mapstructure:"batch-size"`
+	Workers         uint          `mapstructure:"workers"`
+	Limit           uint64        `mapstructure:"limit"`
+	DoLoad          bool          `mapstructure:"do-load"`
+	DoCreateDB      bool          `mapstructure:"do-create-db"`
+	DoAbortOnExist  bool          `mapstructure:"do-abort-on-exist"`
+	ReportingPeriod time.Duration `mapstructure:"reporting-period"`
+	FileName        string        `mapstructure:"file"`
+	Seed            int64         `mapstructure:"seed"`
 }
 
 // AddToFlagSet adds command line flags needed by the BenchmarkRunnerConfig to the flag set.
@@ -81,7 +80,6 @@ func (c BenchmarkRunnerConfig) AddToFlagSet(fs *pflag.FlagSet) {
 	fs.Duration("reporting-period", 10*time.Second, "Period to report write stats")
 	fs.String("file", "", "File name to read data from")
 	fs.Int64("seed", 0, "PRNG seed (default: 0, which uses the current timestamp)")
-	fs.Int64("KostyaColumnCounter", 5000, "[Kostya-Author] Int64 - size ('width') of table 'CPU' (default 5000 columns)")
 }
 
 // BenchmarkRunner is responsible for initializing and storing common
@@ -128,9 +126,6 @@ func GetBenchmarkRunnerWithBatchSize(c BenchmarkRunnerConfig, batchSize uint) *B
 	}
 
 	return loader
-}
-func KostyaColumnCounter() int64 {
-	return loader.KostyaColumnCounter
 }
 
 // DatabaseName returns the value of the --db-name flag (name of the database to store data)
