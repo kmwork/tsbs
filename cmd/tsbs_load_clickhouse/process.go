@@ -60,10 +60,11 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	// and it is easier to keep variable coumns at the end of the list
 
 	// INSERT statement template
-	var cols [common.KostyaNumFields]string
+	var cols [common.KostyaNumFields + 1]string
 	var i int64
+	cols[0] = "id"
 	for i = 0; i < common.KostyaNumFields; i++ {
-		cols[i] = "kostya_" + strconv.FormatInt(i, 10)
+		cols[i+1] = "kostya_" + strconv.FormatInt(i, 10)
 	}
 	var sql = fmt.Sprintf(`
 		INSERT INTO %s (
@@ -94,7 +95,7 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 			values[fieldIndex+1] = f64
 		}
 		log.Printf("[SQL:Value] len(value)= %d", len(values))
-		_, err := stmt.Exec(values)
+		_, err := stmt.Exec(values[:]...)
 		if err != nil {
 			panic(err)
 		}
