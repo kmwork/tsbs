@@ -85,7 +85,7 @@ func GetCPUMetricsSlice(numMetrics int) ([]string, error) {
 
 // GetAllCPUMetrics returns all the metrics for CPU
 func GetAllCPUMetrics() []string {
-	return cpuMetrics[:]
+	return cpuMetrics
 }
 
 // GetCPUMetricsLen returns the number of metrics in CPU

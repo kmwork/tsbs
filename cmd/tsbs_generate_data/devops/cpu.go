@@ -52,5 +52,5 @@ func newCPUMeasurementNumDistributions(start time.Time, numDistributions int) *C
 }
 
 func (m *CPUMeasurement) ToPoint(p *serialize.Point) {
-	m.ToPointAllInt64(p, labelCPU, cpuFields[:])
+	m.ToPointAllInt64(p, labelCPU, cpuFields)
 }

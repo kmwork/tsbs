@@ -180,7 +180,7 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 			// Skip nameless columns
 			continue
 		}
-		columnsWithType = append(columnsWithType, fmt.Sprintf("%s Float64 Codec(Gorilla, ZSTD)", column))
+		columnsWithType = append(columnsWithType, fmt.Sprintf("%s Float64", column))
 	}
 
 	sql := fmt.Sprintf(`
@@ -193,6 +193,8 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 			`,
 		tableName,
 		strings.Join(columnsWithType, ","))
+
+	log.Printf("[SQL-CREATE-TABLE] sql = %s", sql)
 	_, err := db.Exec(sql)
 	if err != nil {
 		panic(err)
