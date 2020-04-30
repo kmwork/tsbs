@@ -160,6 +160,8 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 	// 1: table column name 1
 	// N: table column name N
 
+	log.Printf("[SQL:createMetricsTable] start, tableSpec = %v", tableSpec)
+
 	// Ex.: cpu OR disk OR nginx
 	tableName := tableSpec[0]
 	tableCols[tableName] = tableSpec[1:]
@@ -198,6 +200,7 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 		panic(err)
 	}
 	truncateTable(db, tableName)
+	panic("KOSTY: TEMP")
 }
 
 func truncateTable(db *sqlx.DB, tableName string) {

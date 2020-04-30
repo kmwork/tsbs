@@ -76,7 +76,6 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		strings.Join(cols[:], ","),
 		strings.Repeat(",?", len(cols))[:]) // We need '?,?,?', but repeat ",?" thus we need to chop off 1-st char
 
-	log.Printf("[SQL:Script] sql = %s", sql)
 	tx := p.db.MustBegin()
 	stmt, err := tx.Prepare(sql)
 	var rowCount int = len(rows)
@@ -93,7 +92,7 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 			}
 			values[fieldIndex] = f64
 		}
-		log.Printf("[SQL:Value] value = %v, len(value)= %d", values, len(values))
+		log.Printf("[SQL:Value] len(value)= %d", len(values))
 		_, err := stmt.Exec(values)
 		if err != nil {
 			panic(err)
