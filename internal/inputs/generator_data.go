@@ -218,6 +218,7 @@ func (g *DataGenerator) getSerializer(sim common.Simulator, format string) (seri
 
 func (g *DataGenerator) writeHeader(sim common.Simulator) {
 	g.bufOut.WriteString("cpu\n")
+	g.bufOut.WriteString("cpu")
 	var i int64
 	for i = 0; i < common.KostyaNumFields; i++ {
 		g.bufOut.WriteString(",kostya_")

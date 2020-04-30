@@ -14,7 +14,7 @@ const (
 	errMoreItemsThanScale = "cannot get random permutation with more items than scale"
 )
 
-const KostyaNumFields int64 = 5000
+const KostyaNumFields int64 = 3
 
 // Core is the common component of all generators for all systems
 type Core struct {

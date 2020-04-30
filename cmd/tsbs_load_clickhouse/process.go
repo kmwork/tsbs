@@ -84,13 +84,14 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		var strFields = rows[rowIndex].fields
 		var metrics []string = strings.Split(strFields, ",")
 		var fieldIndex int64
-		var values [common.KostyaNumFields]float64
+		var values [common.KostyaNumFields + 1]interface{}
+		values[0] = rowIndex
 		for fieldIndex = 0; fieldIndex < common.KostyaNumFields; fieldIndex++ {
 			f64, err := strconv.ParseFloat(metrics[fieldIndex], 64)
 			if err != nil {
 				panic(err)
 			}
-			values[fieldIndex] = f64
+			values[fieldIndex+1] = f64
 		}
 		log.Printf("[SQL:Value] len(value)= %d", len(values))
 		_, err := stmt.Exec(values)

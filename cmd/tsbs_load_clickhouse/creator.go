@@ -190,9 +190,9 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 			CREATE TABLE IF NOT EXISTS %s (
 				created_date    Date     DEFAULT today(),
 				created_at      DateTime DEFAULT now() Codec(DoubleDelta, ZSTD),
-				tags_id         UInt32 AUTO_INCREMENT,
+				id		        UInt64,
 				%s
-			) ENGINE = MergeTree(created_date, (tags_id, created_at), 8192)
+			) ENGINE = MergeTree(created_date, (id, created_at), 8192)
 			`,
 		tableName,
 		strings.Join(columnsWithType, ","))
