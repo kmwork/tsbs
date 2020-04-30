@@ -202,7 +202,6 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 		panic(err)
 	}
 	truncateTable(db, tableName)
-	panic("KOSTY: TEMP")
 }
 
 func truncateTable(db *sqlx.DB, tableName string) {
