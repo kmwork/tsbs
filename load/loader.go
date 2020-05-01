@@ -80,6 +80,7 @@ func (c BenchmarkRunnerConfig) AddToFlagSet(fs *pflag.FlagSet) {
 	fs.Duration("reporting-period", 10*time.Second, "Period to report write stats")
 	fs.String("file", "", "File name to read data from")
 	fs.Int64("seed", 0, "PRNG seed (default: 0, which uses the current timestamp)")
+	fs.Int64("KostyaColumnCounter", 5000, "[Kostya-Author] Counter of table columns for 'CPU' (default 5000)")
 }
 
 // BenchmarkRunner is responsible for initializing and storing common
