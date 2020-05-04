@@ -19,7 +19,6 @@ func PreConstructor() {
 }
 
 func KostyaColumnCounter() int64 {
-	log.Printf("[Config:KostyaColumnCounter] value = %d", kostyaColumnCounter)
 	return kostyaColumnCounter
 }
 
