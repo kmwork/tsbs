@@ -7,6 +7,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/uses/devops"
 	"log"
 	"os"
 	"time"
@@ -102,6 +103,8 @@ func (b *benchmark) GetDBCreator() load.DBCreator {
 }
 
 func main() {
+	utils.PreConstructor()
+	devops.PreConstructor()
 	loader.RunBenchmark(&benchmark{dbc: &dbCreator{}}, load.SingleQueue)
 }
 

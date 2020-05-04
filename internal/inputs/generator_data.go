@@ -221,7 +221,7 @@ func (g *DataGenerator) writeHeader(sim common.Simulator) {
 	g.bufOut.WriteString("cpu")
 	var i int64
 	for i = 0; i < utils.KostyaColumnCounter(); i++ {
-		g.bufOut.WriteString(",kostya_")
+		g.bufOut.WriteString(",f")
 		g.bufOut.WriteString(strconv.FormatInt(i, 10))
 	}
 	g.bufOut.WriteString(" \n")

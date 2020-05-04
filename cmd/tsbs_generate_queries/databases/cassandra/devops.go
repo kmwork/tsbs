@@ -78,7 +78,7 @@ func (d *Devops) GroupByOrderByLimit(qi query.Query) {
 
 	humanLabel := "Cassandra max cpu over last 5 min-intervals (random end)"
 	humanDesc := fmt.Sprintf("%s: %s", humanLabel, d.Interval.StartString())
-	d.fillInQuery(qi, humanLabel, humanDesc, "max", []string{"kostya_0"}, interval, nil)
+	d.fillInQuery(qi, humanLabel, humanDesc, "max", []string{"f0"}, interval, nil)
 	q := qi.(*query.Cassandra)
 	q.GroupByDuration = time.Minute
 	q.OrderBy = []byte("timestamp_ns DESC")
@@ -141,7 +141,7 @@ func (d *Devops) LastPointPerHost(qi query.Query) {
 // e.g. in pseudo-SQL:
 //
 // SELECT * FROM cpu
-// WHERE kostya_0 > 90.0
+// WHERE f0 > 90.0
 // AND time >= '$TIME_START' AND time < '$TIME_END'
 // AND (hostname = '$HOST' OR hostname = '$HOST2'...)
 func (d *Devops) HighCPUForHosts(qi query.Query, nHosts int) {
@@ -160,5 +160,5 @@ func (d *Devops) HighCPUForHosts(qi query.Query, nHosts int) {
 	d.fillInQuery(qi, humanLabel, humanDesc, "", devops.GetAllCPUMetrics(), interval, tagSets)
 	q := qi.(*query.Cassandra)
 	q.GroupByDuration = time.Hour
-	q.WhereClause = []byte("kostya_0,>,90.0")
+	q.WhereClause = []byte("f0,>,90.0")
 }

@@ -65,7 +65,7 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	var i int64
 	cols[0] = "id"
 	for i = 0; i < utils.KostyaColumnCounter(); i++ {
-		cols[i+1] = "kostya_" + strconv.FormatInt(i, 10)
+		cols[i+1] = "f" + strconv.FormatInt(i, 10)
 	}
 	var sql = fmt.Sprintf(`
 		INSERT INTO %s (

@@ -63,7 +63,7 @@ func PreConstructor() {
 	cpuMetrics = make([]string, utils.KostyaColumnCounter())
 	var i int64
 	for i = 0; i < utils.KostyaColumnCounter(); i++ {
-		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
+		var fieldName = "f" + strconv.FormatInt(i, 10)
 		cpuMetrics[i] = fieldName
 	}
 }

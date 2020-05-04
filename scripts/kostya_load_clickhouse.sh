@@ -21,6 +21,7 @@ EXE_DIR=${EXE_DIR:-$(dirname $0)}
 source ${EXE_DIR}/load_common.sh
 
 cat ${DATA_FILE} | gunzip | $EXE_FILE_NAME \
+                                --KostyaСountOfColumns=15000 \
                                 --host=${DATABASE_HOST} \
                                 --user=${DATABASE_USER} \
                                 --password=${DATABASE_PASSWORD} \
@@ -29,5 +30,4 @@ cat ${DATA_FILE} | gunzip | $EXE_FILE_NAME \
                                 --batch-size=${BATCH_SIZE} \
                                 --workers=1 \
                                 --reporting-period=${PROGRESS_INTERVAL} \
-                                --KostyaColumnCounter=15000 \
                                 --hash-workers=${HASH_WORKERS}

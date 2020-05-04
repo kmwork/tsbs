@@ -14,13 +14,13 @@ type Cassandra struct {
 	id               uint64
 
 	MeasurementName []byte // e.g. "cpu"
-	FieldName       []byte // e.g. "kostya_0"
+	FieldName       []byte // e.g. "f0"
 	AggregationType []byte // e.g. "avg" or "sum". used literally in the cassandra query.
 	TimeStart       time.Time
 	TimeEnd         time.Time
 	GroupByDuration time.Duration
 	ForEveryN       []byte // e.g. "hostname,1"
-	WhereClause     []byte // e.g. "kostya_0,>,90.0"
+	WhereClause     []byte // e.g. "f0,>,90.0"
 	OrderBy         []byte // e.g. "timestamp_ns DESC"
 	Limit           int
 	TagSets         [][]string // semantically, each subgroup is OR'ed and they are all AND'ed together
