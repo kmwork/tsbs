@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/timescale/tsbs/internal/utils"
 	"log"
-	"math"
 	"strconv"
 	"strings"
 	"sync"
@@ -78,36 +77,47 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		strings.Join(cols[:], ","),
 		strings.Repeat(",?", len(cols))[:]) // We need '?,?,?', but repeat ",?" thus we need to chop off 1-st char
 
-	tx := p.db.MustBegin()
+	var tx *sqlx.Tx = nil
 	stmt, err := tx.Prepare(sql)
 	var rowCount int64 = int64(len(rows))
 	var rowIndex int64
 	var values []interface{} = make([]interface{}, utils.KostyaColumnCounter()+1)
+	log.Printf("Insert for totalRows = %d", rowCount)
 	for rowIndex = 0; rowIndex < rowCount; rowIndex++ {
-		if math.Mod(float64(rowIndex), 1000) < 0.001 {
-			log.Printf("Insert by rowIndex = %d, totalRows = %d", rowIndex, rowCount)
-		}
+		//if math.Mod(float64(rowIndex), 1000) < 0.001 {
+		log.Printf("[Row: %d]Insert", rowIndex)
+		//}
 		var strFields = rows[rowIndex].fields
 		var metrics []string = strings.Split(strFields, ",")
 		var fieldIndex int64
-		values[0] = rowIndex
+		values[0] = time.Now()
 		for fieldIndex = 0; fieldIndex < utils.KostyaColumnCounter(); fieldIndex++ {
+			log.Printf("[Row: %d] for by field = %d", rowIndex, fieldIndex)
 			f64, err := strconv.ParseFloat(metrics[fieldIndex], 64)
 			if err != nil {
 				panic(err)
 			}
 			values[fieldIndex+1] = f64
 		}
+		log.Printf("[Row: %d] exec sql for len(values)= %d", rowIndex, len(values))
+
+		if tx == nil {
+			tx = p.db.MustBegin()
+		}
 		_, err := stmt.Exec(values[:]...)
+		if err != nil {
+			panic(err)
+		}
+
+		if err != nil {
+			panic(err)
+		}
+		err = tx.Commit()
 		if err != nil {
 			panic(err)
 		}
 	}
 	err = stmt.Close()
-	if err != nil {
-		panic(err)
-	}
-	err = tx.Commit()
 	if err != nil {
 		panic(err)
 	}
