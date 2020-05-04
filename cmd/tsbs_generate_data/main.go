@@ -15,6 +15,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/timescale/tsbs/cmd/tsbs_generate_data/devops"
 	"log"
 	"os"
 	"os/signal"
@@ -61,6 +62,8 @@ func init() {
 
 func main() {
 	log.Println("++++++++++++++++ START KOSTYA +++++++++++++++++++++++")
+	utils.PreConstructor()
+	devops.PreConstructor()
 	if len(profileFile) > 0 {
 		defer startMemoryProfile(profileFile)()
 	}

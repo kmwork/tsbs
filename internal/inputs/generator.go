@@ -56,7 +56,7 @@ func (c *BaseConfig) AddToFlagSet(fs *pflag.FlagSet) {
 	fs.Int64("seed", 0, "PRNG seed (default: 0, which uses the current timestamp)")
 	fs.Int("debug", 0, "Control level of debug output")
 	fs.String("file", "", "Write the output to this path")
-	fs.Int64("KostyaColumnCounter", 5000, "[Kostya-Author] Counter of table columns for 'CPU' (default 5000)")
+	fs.Int64("kostya-count-of-columns", 5000, "[Kostya-Author] Counter of table columns for 'CPU' (default 5000)")
 }
 
 func (c *BaseConfig) Validate() error {

@@ -83,7 +83,7 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	var rowCount int64 = int64(len(rows))
 	var rowIndex int64
 	for rowIndex = 0; rowIndex < rowCount; rowIndex++ {
-		if math.Mod(float64(rowIndex), float64(100)) < 0.01 {
+		if math.Mod(float64(rowIndex), 1000) < 0.001 {
 			log.Printf("Insert by rowIndex = %d, totalRows = %d", rowIndex, rowCount)
 		}
 		var strFields = rows[rowIndex].fields

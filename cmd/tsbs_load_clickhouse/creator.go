@@ -185,8 +185,6 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 			`,
 		tableName,
 		strings.Join(columnsWithType, ","))
-
-	log.Printf("[SQL-CREATE-TABLE] sql = %s", sql)
 	_, err := db.Exec(sql)
 	if err != nil {
 		panic(err)

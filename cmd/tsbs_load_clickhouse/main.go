@@ -6,6 +6,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/uses/devops"
 	"log"
 
 	"github.com/spf13/pflag"
@@ -129,6 +130,8 @@ func (b *benchmark) GetDBCreator() load.DBCreator {
 }
 
 func main() {
+	utils.PreConstructor()
+	devops.PreConstructor()
 	if hashWorkers {
 		loader.RunBenchmark(&benchmark{}, load.WorkerPerQueue)
 	} else {

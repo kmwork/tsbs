@@ -5,16 +5,22 @@ import (
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"log"
+	"os"
 )
 
-var kostyaColumnCounter = flag.Int64("KostyaColumnCounter", 5000, "[Kostya-Author] Counter of table columns for 'CPU' (default 5000)")
+var kostyaColumnCounter int64
 
-func init() {
-	log.Printf("[Config:Common] kostyaColumnCounter = %d", KostyaColumnCounter())
+func PreConstructor() {
+	log.Printf("[Config:Common] os.Args = %v", os.Args)
+	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
+	flag.Int64Var(&kostyaColumnCounter, "kostya-count-of-columns", 5000, "[Kostya-Author] Counter of table columns for 'CPU' (default 5000)")
+	flag.Parse()
+	log.Printf("[Config:PreConstructor] kostyaColumnCounter = %d", kostyaColumnCounter)
 }
 
 func KostyaColumnCounter() int64 {
-	return *kostyaColumnCounter
+	log.Printf("[Config:KostyaColumnCounter] value = %d", kostyaColumnCounter)
+	return kostyaColumnCounter
 }
 
 // SetupConfigFile defines the settings for the configuration file support.

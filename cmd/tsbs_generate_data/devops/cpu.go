@@ -13,12 +13,8 @@ import (
 var labelCPU = []byte("cpu") // heap optimization
 var cpuFields []common.LabeledDistributionMaker
 
-func init() {
+func PreConstructor() {
 	cpuFields = make([]common.LabeledDistributionMaker, utils.KostyaColumnCounter())
-}
-
-// for cpuFields generate (c) kostya
-func init() {
 	var i int64
 	for i = 0; i < utils.KostyaColumnCounter(); i++ {
 		var fieldName = "kostya_" + strconv.FormatInt(i, 10)
