@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"github.com/timescale/tsbs/internal/utils"
 	"log"
@@ -66,20 +67,6 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	for i = 0; i < utils.KostyaColumnCounter(); i++ {
 		cols[i+1] = "f" + strconv.FormatInt(i, 10)
 	}
-	var sql = fmt.Sprintf(`
-		INSERT INTO %s (
-			%s
-		) VALUES (
-			%s
-		)
-		`,
-		tableName,
-		strings.Join(cols[:], ","),
-		strings.Repeat(",?", len(cols))[:]) // We need '?,?,?', but repeat ",?" thus we need to chop off 1-st char
-
-	tx := p.db.MustBegin()
-	stmt, err := tx.Prepare(sql)
-	//tx.Commit()
 	var rowCount int64 = int64(len(rows))
 	var rowIndex int64
 	var values []interface{} = make([]interface{}, utils.KostyaColumnCounter()+1)
@@ -89,35 +76,33 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		log.Printf("[Row: %d]Insert", rowIndex)
 		//}
 		var strFields = rows[rowIndex].fields
-		var metrics []string = strings.Split(strFields, ",")
-		rows[rowIndex].fields = ""
-		if len(metrics) != int(utils.KostyaColumnCounter()+1) {
-			log.Panicf("invalid strFields = %d", len(metrics))
-		}
-		var fieldIndex int64
-		values[0] = time.Now()
-		for fieldIndex = 1; fieldIndex <= utils.KostyaColumnCounter(); fieldIndex++ {
-			log.Printf("[Row: %d] for by field = %d", rowIndex, fieldIndex)
-			f64, err := strconv.ParseFloat(metrics[fieldIndex], 64)
-			if err != nil {
-				panic(err)
-			}
-			values[fieldIndex] = f64
-		}
-		metrics = nil
+		var strSql = fmt.Sprintf(`
+		INSERT INTO %s (
+			%s
+		) VALUES (
+			%s
+		)
+		`,
+			tableName,
+			strings.Join(cols[:], ","),
+			strFields) // We need '?,?,?', but repeat ",?" thus we need to chop off 1-st char
+
 		log.Printf("[Row: %d] exec sql for len(values)= %d", rowIndex, len(values))
 
-		tx = p.db.MustBegin()
-		_, err := stmt.Exec(values[:]...)
+		var tx = p.db.MustBegin()
+		var rr sql.Result
+		rr, err := tx.Exec(strSql)
 		err = tx.Commit()
+		//err = stmt.Close()
+		log.Printf("[Row: %d] exec sql for rr%+v", rowIndex, rr)
 		if err != nil {
 			panic(err)
 		}
 	}
-	err = stmt.Close()
-	if err != nil {
-		panic(err)
-	}
+	//err = stmt.Close()
+	//if err != nil {
+	//	panic(err)
+	//}
 
 	return ret
 }
