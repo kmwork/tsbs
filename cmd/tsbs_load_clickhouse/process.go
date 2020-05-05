@@ -89,19 +89,19 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		log.Printf("[Row: %d]Insert", rowIndex)
 		//}
 		var strFields = rows[rowIndex].fields
-		if len(strFields) != int(utils.KostyaColumnCounter()) {
-			log.Panicf("invalid strFields = %s", strFields)
-		}
 		var metrics []string = strings.Split(strFields, ",")
+		if len(metrics) != int(utils.KostyaColumnCounter()+1) {
+			log.Panicf("invalid strFields = %d", len(metrics))
+		}
 		var fieldIndex int64
 		values[0] = time.Now()
-		for fieldIndex = 0; fieldIndex < utils.KostyaColumnCounter(); fieldIndex++ {
+		for fieldIndex = 1; fieldIndex <= utils.KostyaColumnCounter(); fieldIndex++ {
 			log.Printf("[Row: %d] for by field = %d", rowIndex, fieldIndex)
 			f64, err := strconv.ParseFloat(metrics[fieldIndex], 64)
 			if err != nil {
 				panic(err)
 			}
-			values[fieldIndex+1] = f64
+			values[fieldIndex] = f64
 		}
 		log.Printf("[Row: %d] exec sql for len(values)= %d", rowIndex, len(values))
 
