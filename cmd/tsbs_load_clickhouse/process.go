@@ -89,6 +89,9 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		log.Printf("[Row: %d]Insert", rowIndex)
 		//}
 		var strFields = rows[rowIndex].fields
+		if len(strFields) != int(utils.KostyaColumnCounter()) {
+			log.Panicf("invalid strFields = %s", strFields)
+		}
 		var metrics []string = strings.Split(strFields, ",")
 		var fieldIndex int64
 		values[0] = time.Now()
