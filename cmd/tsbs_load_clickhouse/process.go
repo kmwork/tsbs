@@ -77,8 +77,9 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		strings.Join(cols[:], ","),
 		strings.Repeat(",?", len(cols))[:]) // We need '?,?,?', but repeat ",?" thus we need to chop off 1-st char
 
-	var tx *sqlx.Tx = nil
+	tx := p.db.MustBegin()
 	stmt, err := tx.Prepare(sql)
+	//tx.Commit()
 	var rowCount int64 = int64(len(rows))
 	var rowIndex int64
 	var values []interface{} = make([]interface{}, utils.KostyaColumnCounter()+1)
@@ -101,17 +102,8 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		}
 		log.Printf("[Row: %d] exec sql for len(values)= %d", rowIndex, len(values))
 
-		if tx == nil {
-			tx = p.db.MustBegin()
-		}
+		tx = p.db.MustBegin()
 		_, err := stmt.Exec(values[:]...)
-		if err != nil {
-			panic(err)
-		}
-
-		if err != nil {
-			panic(err)
-		}
 		err = tx.Commit()
 		if err != nil {
 			panic(err)
