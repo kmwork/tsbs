@@ -26,7 +26,8 @@ done
 
 cqlsh -e 'drop keyspace measurements;'
 cat ${DATA_FILE} | gunzip | $EXE_FILE_NAME \
-                                --workers=${NUM_WORKERS} \
+                                --KostyaСountOfColumns=8000 \
+                                --workers=1 \
                                 --batch-size=${BATCH_SIZE} \
                                 --reporting-period=${REPORTING_PERIOD} \
                                 --write-timeout=${CASSANDRA_TIMEOUT} \
