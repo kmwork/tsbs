@@ -37,11 +37,15 @@ func singleMetricToInsertStatement(text string, columnsLine string) string {
 	insertStatement := "INSERT INTO %s(cassandra_id, %s) VALUES(%s)"
 	parts := strings.Split(text, ",")
 
+	log.Printf("[singleMetricToInsertStatement] text = %s", text)
+	log.Printf("[singleMetricToInsertStatement]    parts = %v", parts)
 	table := parts[0]
 	id := strconv.FormatInt(int64(time.Now().Nanosecond()), 10)
 	valuesLine := id + ", " + strings.Join(parts[2:], ",") // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS
 
-	return fmt.Sprintf(insertStatement, table, columnsLine, valuesLine)
+	result := fmt.Sprintf(insertStatement, table, columnsLine, valuesLine)
+	log.Printf("[SQL:Insert] result = %s", result)
+	return result
 }
 
 type eventsBatch struct {

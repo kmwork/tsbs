@@ -127,7 +127,9 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 	if doLoad {
 		batch := p.dbc.clientSession.NewBatch(gocql.LoggedBatch)
 		for _, event := range events.rows {
-			batch.Query(singleMetricToInsertStatement(event, columnsLine))
+			if len(event) > 25 {
+				batch.Query(singleMetricToInsertStatement(event, columnsLine))
+			}
 		}
 
 		err := p.dbc.clientSession.ExecuteBatch(batch)
