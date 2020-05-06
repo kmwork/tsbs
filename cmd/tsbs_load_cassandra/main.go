@@ -125,10 +125,12 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 		columnsLine += ", f" + strconv.FormatInt(i, 10)
 	}
 	var rowCnt uint64 = 0
+	var allCount uint64 = 0
 	if doLoad {
 		batch := p.dbc.clientSession.NewBatch(gocql.LoggedBatch)
+		allCount++
 		for _, event := range events.rows {
-			if len(event) > 25 {
+			if len(event) > 25 && allCount >= 5 {
 				batch.Query(singleMetricToInsertStatement(event, columnsLine))
 				rowCnt++
 			}

@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/timescale/tsbs/internal/utils"
 	"log"
 	"strconv"
 	"strings"
@@ -36,6 +37,9 @@ func (d *decoder) Decode(_ *bufio.Reader) *load.Point {
 func singleMetricToInsertStatement(text string, columnsLine string) string {
 	insertStatement := "INSERT INTO cassandra_cpu(cassandra_id %s) VALUES(%s)"
 	parts := strings.Split(text, ",")
+	if int64(len(parts)) != utils.KostyaColumnCounter()+2 {
+		log.Printf("[singleMetricToInsertStatement] invalid line = %s, len(parts) = %d", text, len(parts))
+	}
 
 	id := strconv.FormatInt(int64(time.Now().Nanosecond()), 10)
 	valuesLine := id + ", " + strings.Join(parts[2:], ",") // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS

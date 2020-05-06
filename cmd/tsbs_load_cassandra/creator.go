@@ -66,7 +66,7 @@ func (d *dbCreator) CreateDB(dbName string) error {
 				 )
 				 WITH COMPACT STORAGE;`,
 		dbName, columnsWithTypeLine)
-
+	//log.Printf("[SQL:Create-Table] sql = %s", q)
 	if err := d.globalSession.Query(q).Exec(); err != nil {
 		return err
 	}
