@@ -144,5 +144,5 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 	metricCnt := uint64(len(events.rows))
 	events.rows = events.rows[:0]
 	ePool.Put(events)
-	return metricCnt, rowCnt
+	return metricCnt, allCount
 }
