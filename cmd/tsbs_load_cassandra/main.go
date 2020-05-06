@@ -124,13 +124,13 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 	for i = 0; i < utils.KostyaColumnCounter(); i++ {
 		columnsLine += ", f" + strconv.FormatInt(i, 10)
 	}
-	var allCount uint64 = 0
+	var rowCnt uint64 = 0
 	if doLoad {
 		batch := p.dbc.clientSession.NewBatch(gocql.LoggedBatch)
-		for _, event := range events.rows {
-			allCount++
-			if len(event) > 25 && allCount >= 5 {
+		for index, event := range events.rows {
+			if len(event) > 25 && index >= 5 {
 				batch.Query(singleMetricToInsertStatement(event, columnsLine))
+				rowCnt++
 			}
 		}
 
@@ -142,5 +142,5 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 	metricCnt := uint64(len(events.rows))
 	events.rows = events.rows[:0]
 	ePool.Put(events)
-	return metricCnt, allCount
+	return metricCnt, rowCnt
 }

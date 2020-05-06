@@ -49,9 +49,8 @@ func subsystemTagsToJSON(tags []string) string {
 }
 
 // Process part of incoming data - insert into tables
-func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
+func (p *processor) processCSI(tableName string, rows []*insertData) (uint64, uint64) {
 	log.Printf("[Insert:SQL] tableName = %s", tableName)
-	ret := uint64(0)
 
 	// Prepare column names
 	// First columns would be "created_date", "created_at", "time", "tags_id", "additional_tags"
@@ -83,6 +82,9 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	var rowIndex int64
 	var values []interface{} = make([]interface{}, utils.KostyaColumnCounter()+1)
 	log.Printf("Insert for totalRows = %d", rowCount)
+
+	var metricCount uint64 = 0
+	var rowCountInserted uint64 = 0
 	for rowIndex = 0; rowIndex < rowCount; rowIndex++ {
 		var strFields = rows[rowIndex].fields
 		var metrics []string = strings.Split(strFields, ",")
@@ -97,10 +99,12 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 				panic(err)
 			}
 			values[fieldIndex] = f64
+			metricCount++
 		}
 		metrics = nil
 
 		_, err := stmt.Exec(values[:]...)
+		rowCountInserted++
 		if err != nil {
 			panic(err)
 		}
@@ -123,7 +127,7 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	//	panic(err)
 	//}
 
-	return ret
+	return metricCount, rowCountInserted
 }
 
 // load.Processor interface implementation
@@ -154,14 +158,14 @@ func (p *processor) Close(doLoad bool) {
 // load.Processor interface implementation
 func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 	batches := b.(*tableArr)
-	rowCnt := 0
-	metricCnt := uint64(0)
+	var rowInsertedСnt uint64 = 0
+	var metricCnt uint64 = 0
 	for tableName, rows := range batches.m {
-		rowCnt += len(rows)
 		if doLoad {
 			start := time.Now()
-			metricCnt += p.processCSI(tableName, rows)
-
+			var singleMetricCnt, singleRowCount uint64 = p.processCSI(tableName, rows)
+			metricCnt += singleMetricCnt
+			rowInsertedСnt += singleRowCount
 			if logBatches {
 				now := time.Now()
 				took := now.Sub(start)
@@ -173,7 +177,7 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 	batches.m = map[string][]*insertData{}
 	batches.cnt = 0
 
-	return metricCnt, uint64(rowCnt)
+	return metricCnt, rowInsertedСnt
 }
 
 func convertBasedOnType(serializedType, value string) interface{} {
