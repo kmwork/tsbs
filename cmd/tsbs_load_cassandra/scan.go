@@ -34,16 +34,15 @@ func (d *decoder) Decode(_ *bufio.Reader) *load.Point {
 // We currently only support a 1-line:1-metric mapping for Cassandra. Implement
 // other functions here to support other formats.
 func singleMetricToInsertStatement(text string, columnsLine string) string {
-	insertStatement := "INSERT INTO %s(cassandra_id %s) VALUES(%s)"
+	insertStatement := "INSERT INTO cassandra_cpu(cassandra_id %s) VALUES(%s)"
 	parts := strings.Split(text, ",")
 
 	log.Printf("[singleMetricToInsertStatement] text = %s", text)
 	log.Printf("[singleMetricToInsertStatement]    parts = %v", parts)
-	table := parts[0]
 	id := strconv.FormatInt(int64(time.Now().Nanosecond()), 10)
 	valuesLine := id + ", " + strings.Join(parts[2:], ",") // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS
 
-	result := fmt.Sprintf(insertStatement, table, columnsLine, valuesLine)
+	result := fmt.Sprintf(insertStatement, columnsLine, valuesLine)
 	log.Printf("[SQL:Insert] result = %s", result)
 	return result
 }
