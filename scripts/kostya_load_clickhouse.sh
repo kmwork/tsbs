@@ -22,9 +22,9 @@ source ${EXE_DIR}/load_common.sh
 
 cat ${DATA_FILE} | gunzip | $EXE_FILE_NAME \
                                 --KostyaСountOfColumns=8000 \
-                                --host=${DATABASE_HOST} \
+                                --host="mmk-i1-clickhouse.datana.ru" \
                                 --user=${DATABASE_USER} \
-                                --password=${DATABASE_PASSWORD} \
+                                --password="Gbplfnsq!" \
                                 --port=9000 \
                                 --db-name=${DATABASE_NAME} \
                                 --batch-size=${BATCH_SIZE} \
