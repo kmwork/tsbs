@@ -208,9 +208,9 @@ func getConnectString(db bool) string {
 	// tcp://host1:9000?username=user&password=qwerty&database=clicks&read_timeout=10&write_timeout=20&alt_hosts=host2:9000,host3:9000
 	var strUrl string
 	if db {
-		strUrl = fmt.Sprintf("tcp://%s:%s?username=%s&password=%s&database=%s", host, port, user, password, loader.DatabaseName())
+		strUrl = fmt.Sprintf("tcp://%s:%s?username=%s&password=%s&database=%s&compression='lz4'", host, port, user, password, loader.DatabaseName())
 	} else {
-		strUrl = fmt.Sprintf("tcp://%s:%s?username=%s&password=%s", host, port, user, password)
+		strUrl = fmt.Sprintf("tcp://%s:%s?username=%s&password=%s&compression='lz4'", host, port, user, password)
 	}
 	log.Printf("connection Url = %s, Type_as_db = %t", strUrl, db)
 	return strUrl
