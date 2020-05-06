@@ -9,7 +9,7 @@ if [[ -z "$EXE_FILE_NAME" ]]; then
 fi
 
 # Load parameters - common
-DATA_FILE_NAME=yandex-data-t4.gz
+DATA_FILE_NAME=yandex-and-cassandra-data-t4.gz
 DATABASE_USER=${DATABASE_USER:-default}
 DATABASE_PASSWORD=1
 export BULK_DATA_DIR=/my-ext4

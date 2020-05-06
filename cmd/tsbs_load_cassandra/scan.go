@@ -4,8 +4,10 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/timescale/tsbs/load"
 )
@@ -32,17 +34,14 @@ func (d *decoder) Decode(_ *bufio.Reader) *load.Point {
 // We currently only support a 1-line:1-metric mapping for Cassandra. Implement
 // other functions here to support other formats.
 func singleMetricToInsertStatement(text string, columnsLine string) string {
-	insertStatement := "INSERT INTO %s(series_id, timestamp_ns, %s) VALUES('%s#%s#%s', %s, %s)"
+	insertStatement := "INSERT INTO %s(cassandra_id, %s) VALUES(%s)"
 	parts := strings.Split(text, ",")
-	tagsEndIndex := (len(parts) - 1) - 4 // list of tags ends right before the last 4 parts of the line
 
 	table := parts[0]
-	measurementName := parts[tagsEndIndex+1] // offset: table + numTags
-	dayBucket := parts[tagsEndIndex+2]       // offset: table + numTags + measurementName
-	timestampNS := parts[tagsEndIndex+3]     // offset: table + numTags + numTags + measurementName + dayBucket
-	value := strings.Join(parts[4:], ",")    // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS
+	id := strconv.FormatInt(int64(time.Now().Nanosecond()), 10)
+	valuesLine := id + ", " + strings.Join(parts[2:], ",") // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS
 
-	return fmt.Sprintf(insertStatement, table, columnsLine, measurementName, dayBucket, timestampNS, value)
+	return fmt.Sprintf(insertStatement, table, columnsLine, valuesLine)
 }
 
 type eventsBatch struct {

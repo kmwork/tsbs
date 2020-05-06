@@ -53,20 +53,19 @@ func (d *dbCreator) CreateDB(dbName string) error {
 	if err := d.globalSession.Query(fmt.Sprintf("create keyspace %s with replication = %s;", dbName, replicationConfiguration)).Exec(); err != nil {
 		return err
 	}
-	var columnsWithType []string = make([]string, utils.KostyaColumnCounter())
+	var columnsWithTypeLine string = ""
 	var i int64
 	for i = 0; i < utils.KostyaColumnCounter(); i++ {
-		columnsWithType[i] = "f" + strconv.FormatInt(i, 10) + " float"
+		columnsWithTypeLine += "f" + strconv.FormatInt(i, 10) + " float, "
 	}
 
 	q := fmt.Sprintf(`CREATE TABLE %s.cassandra_cpu (
-					series_id text,
-					timestamp_ns bigint,
-					%s,
-					PRIMARY KEY (series_id, timestamp_ns)
+					cassandra_id bigint,
+					%s
+					PRIMARY KEY (cassandra_id)
 				 )
 				 WITH COMPACT STORAGE;`,
-		dbName, columnsWithType)
+		dbName, columnsWithTypeLine)
 
 	if err := d.globalSession.Query(q).Exec(); err != nil {
 		return err

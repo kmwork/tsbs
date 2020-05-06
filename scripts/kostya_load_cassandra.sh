@@ -10,7 +10,7 @@ fi
 
 # Load parameters - common
 DATABASE_PORT=${DATABASE_PORT:-9042}
-DATA_FILE_NAME=cassandra-data-c5.gz
+DATA_FILE_NAME=yandex-and-cassandra-data-t4.gz
 export BULK_DATA_DIR=/my-ext4
 
 
@@ -29,7 +29,7 @@ done
 
 cqlsh -e 'drop keyspace measurements;'
 cat ${DATA_FILE} | gunzip | $EXE_FILE_NAME \
-                                --KostyaСountOfColumns=8000 \
+                                --KostyaСountOfColumns=4 \
                                 --workers=1 \
                                 --batch-size=${BATCH_SIZE} \
                                 --reporting-period=${REPORTING_PERIOD} \
