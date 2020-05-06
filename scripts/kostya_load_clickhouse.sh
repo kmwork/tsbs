@@ -21,7 +21,7 @@ EXE_DIR=${EXE_DIR:-$(dirname $0)}
 source ${EXE_DIR}/load_common.sh
 
 cat ${DATA_FILE} | gunzip | $EXE_FILE_NAME \
-                                --KostyaСountOfColumns=15000 \
+                                --KostyaСountOfColumns=10000 \
                                 --host=${DATABASE_HOST} \
                                 --user=${DATABASE_USER} \
                                 --password=${DATABASE_PASSWORD} \

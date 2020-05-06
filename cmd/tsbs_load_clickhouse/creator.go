@@ -172,7 +172,7 @@ func createMetricsTable(db *sqlx.DB, tableSpec []string) {
 	var columnsWithType []string = make([]string, utils.KostyaColumnCounter())
 	var i int64
 	for i = 0; i < utils.KostyaColumnCounter(); i++ {
-		columnsWithType[i] = tableSpec[i+1] + " Float64"
+		columnsWithType[i] = tableSpec[i+1] + " Float64 CODEC(Delta,LZ4)"
 	}
 
 	sql := fmt.Sprintf(`

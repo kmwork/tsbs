@@ -79,7 +79,6 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 
 	tx := p.db.MustBegin()
 	stmt, err := tx.Prepare(sql)
-	tx.Commit()
 	var rowCount int64 = int64(len(rows))
 	var rowIndex int64
 	var values []interface{} = make([]interface{}, utils.KostyaColumnCounter()+1)
@@ -103,14 +102,21 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 		metrics = nil
 		log.Printf("[Row: %d] exec sql for len(values)= %d", rowIndex, len(values))
 
-		tx = p.db.MustBegin()
 		_, err := stmt.Exec(values[:]...)
-		err = tx.Commit()
 		if err != nil {
 			panic(err)
 		}
 	}
 	err = stmt.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		panic(err)
+	}
+
 	if err != nil {
 		panic(err)
 	}
