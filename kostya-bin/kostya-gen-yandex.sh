@@ -1,6 +1,6 @@
 #!/bin/sh -v
 clear
-./tsbs_generate_data --KostyaСountOfColumns=5000 \
+./tsbs_generate_data --KostyaСountOfColumns=10000 \
     --use-case="devops" --seed=500 --scale=1000 \
     --timestamp-start="2020-04-01T00:00:00Z" \
     --timestamp-end="2020-04-01T00:01:00Z" \
