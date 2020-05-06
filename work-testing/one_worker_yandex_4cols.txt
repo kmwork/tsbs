@@ -1,0 +1,4 @@
+Summary:
+loaded 0 metrics in 7.334sec with 1 workers (mean rate 0.00 metrics/sec)
+loaded 2000 rows in 7.334sec with 1 workers (mean rate 272.71 rows/sec)
+lin@lin-pc:~/go/src/github.com/timescale/tsbs/scripts$

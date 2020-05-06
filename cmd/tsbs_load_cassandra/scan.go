@@ -37,13 +37,10 @@ func singleMetricToInsertStatement(text string, columnsLine string) string {
 	insertStatement := "INSERT INTO cassandra_cpu(cassandra_id %s) VALUES(%s)"
 	parts := strings.Split(text, ",")
 
-	log.Printf("[singleMetricToInsertStatement] text = %s", text)
-	log.Printf("[singleMetricToInsertStatement]    parts = %v", parts)
 	id := strconv.FormatInt(int64(time.Now().Nanosecond()), 10)
 	valuesLine := id + ", " + strings.Join(parts[2:], ",") // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS
 
 	result := fmt.Sprintf(insertStatement, columnsLine, valuesLine)
-	log.Printf("[SQL:Insert] result = %s", result)
 	return result
 }
 

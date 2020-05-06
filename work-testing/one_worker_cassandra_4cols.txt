@@ -1,0 +1,3 @@
+Summary:
+loaded 4003 metrics in 0.394sec with 1 workers (mean rate 10170.79 metrics/sec)
+loaded 2000 rows in 0.394sec with 1 workers (mean rate 5081.59 rows/sec)

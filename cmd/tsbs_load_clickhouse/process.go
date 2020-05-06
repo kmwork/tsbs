@@ -84,7 +84,6 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	var values []interface{} = make([]interface{}, utils.KostyaColumnCounter()+1)
 	log.Printf("Insert for totalRows = %d", rowCount)
 	for rowIndex = 0; rowIndex < rowCount; rowIndex++ {
-		log.Printf("[Row: %d]Insert", rowIndex)
 		var strFields = rows[rowIndex].fields
 		var metrics []string = strings.Split(strFields, ",")
 		if int64(len(metrics)) != utils.KostyaColumnCounter()+1 {
@@ -100,7 +99,6 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 			values[fieldIndex] = f64
 		}
 		metrics = nil
-		log.Printf("[Row: %d] exec sql for len(values)= %d", rowIndex, len(values))
 
 		_, err := stmt.Exec(values[:]...)
 		if err != nil {
