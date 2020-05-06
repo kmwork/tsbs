@@ -11,6 +11,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gocql/gocql"
@@ -125,11 +126,19 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 		columnsLine += ", f" + strconv.FormatInt(i, 10)
 	}
 	var rowCnt uint64 = 0
+	var metricCnt uint64 = 0
 	if doLoad {
 		batch := p.dbc.clientSession.NewBatch(gocql.LoggedBatch)
 		for index, event := range events.rows {
-			if len(event) > 25 && index >= 5 {
-				batch.Query(singleMetricToInsertStatement(event, columnsLine))
+			if strings.Compare("tags", event) == 0 {
+				continue
+			}
+			if index >= 4 {
+				var singleMetricCount uint64
+				var strQuery string
+				singleMetricCount, strQuery = singleMetricToInsertStatement(event, columnsLine)
+				batch.Query(strQuery)
+				metricCnt += singleMetricCount
 				rowCnt++
 			}
 		}
@@ -139,7 +148,6 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 			log.Fatalf("Error writing: %s\n", err.Error())
 		}
 	}
-	metricCnt := uint64(len(events.rows))
 	events.rows = events.rows[:0]
 	ePool.Put(events)
 	return metricCnt, rowCnt

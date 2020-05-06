@@ -34,7 +34,7 @@ func (d *decoder) Decode(_ *bufio.Reader) *load.Point {
 // Transforms a CSV string encoding a single metric into a CQL INSERT statement.
 // We currently only support a 1-line:1-metric mapping for Cassandra. Implement
 // other functions here to support other formats.
-func singleMetricToInsertStatement(text string, columnsLine string) string {
+func singleMetricToInsertStatement(text string, columnsLine string) (uint64, string) {
 	insertStatement := "INSERT INTO cassandra_cpu(cassandra_id %s) VALUES(%s)"
 	parts := strings.Split(text, ",")
 	if int64(len(parts)) != utils.KostyaColumnCounter()+2 {
@@ -46,7 +46,7 @@ func singleMetricToInsertStatement(text string, columnsLine string) string {
 
 	result := fmt.Sprintf(insertStatement, columnsLine, valuesLine)
 	//log.Printf("[SQL:Insert] result = %s", result)
-	return result
+	return uint64(utils.KostyaColumnCounter() + 1), result
 }
 
 type eventsBatch struct {

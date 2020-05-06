@@ -1,5 +1,4 @@
 columns=8000
 Summary:
-loaded 4003 metrics in 59.117sec with 1 workers (mean rate 67.71 metrics/sec)
-loaded 1200 rows in 59.117sec with 1 workers (mean rate 20.30 rows/sec)
-lin@lin-pc:~/go/src/github.com/timescale/tsbs/scripts$
+loaded 9601200 metrics in 55.662sec with 1 workers (mean rate 172490.47 metrics/sec)
+loaded 1200 rows in 55.662sec with 1 workers (mean rate 21.56 rows/sec)

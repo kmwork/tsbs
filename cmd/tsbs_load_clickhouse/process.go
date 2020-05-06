@@ -99,8 +99,8 @@ func (p *processor) processCSI(tableName string, rows []*insertData) (uint64, ui
 				panic(err)
 			}
 			values[fieldIndex] = f64
-			metricCount++
 		}
+		metricCount += uint64(len(values))
 		metrics = nil
 
 		_, err := stmt.Exec(values[:]...)
