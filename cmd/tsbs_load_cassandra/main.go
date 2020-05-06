@@ -128,8 +128,8 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 	var allCount uint64 = 0
 	if doLoad {
 		batch := p.dbc.clientSession.NewBatch(gocql.LoggedBatch)
-		allCount++
 		for _, event := range events.rows {
+			allCount++
 			if len(event) > 25 && allCount >= 5 {
 				batch.Query(singleMetricToInsertStatement(event, columnsLine))
 				rowCnt++
