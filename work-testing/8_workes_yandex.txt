@@ -1,3 +1,0 @@
-Summary:
-loaded 0 metrics in 194.353sec with 8 workers (mean rate 0.00 metrics/sec)
-loaded 2000 rows in 194.353sec with 8 workers (mean rate 10.29 rows/sec)
