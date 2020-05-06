@@ -1,5 +1,6 @@
 #!/bin/bash
-
+clear
+export PATH=$PATH:/home/lin/go/bin
 # Ensure loader is available
 EXE_FILE_NAME=${EXE_FILE_NAME:-$(which tsbs_load_cassandra)}
 if [[ -z "$EXE_FILE_NAME" ]]; then
