@@ -27,9 +27,9 @@ shell-командные файлы запускать из папки <где �
     
 # для загрузки данных папка в папке scripts  
  по аналогии (по желанию и пути правятся согласно документации)
- kostya_load_cassandra.sh
- kostya_load_cassandra_4.sh
- kostya_load_cassandra_5000.sh
- kostya_load_clickhouse.sh
- 
+    kostya_load_cassandra.sh
+    kostya_load_cassandra_4.sh
+    kostya_load_cassandra_5000.sh
+    kostya_load_clickhouse.sh
+     
  
