@@ -8,8 +8,10 @@ if [[ -z "$EXE_FILE_NAME" ]]; then
 fi
 
 # Load parameters - common
-DATA_FILE_NAME=${DATA_FILE_NAME:-cassandra-data.gz}
 DATABASE_PORT=${DATABASE_PORT:-9042}
+DATA_FILE_NAME=cassandra-data-c5.gz
+export BULK_DATA_DIR=/my-ext4
+
 
 # Load parameters - personal
 CASSANDRA_TIMEOUT=${CASSANDRA_TIMEOUT:-1000s}
