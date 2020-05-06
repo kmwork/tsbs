@@ -41,6 +41,7 @@ func singleMetricToInsertStatement(text string, columnsLine string) string {
 	valuesLine := id + ", " + strings.Join(parts[2:], ",") // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS
 
 	result := fmt.Sprintf(insertStatement, columnsLine, valuesLine)
+	//log.Printf("[SQL:Insert] result = %s", result)
 	return result
 }
 
