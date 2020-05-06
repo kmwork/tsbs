@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"github.com/timescale/tsbs/internal/utils"
 	"log"
@@ -67,37 +66,53 @@ func (p *processor) processCSI(tableName string, rows []*insertData) uint64 {
 	for i = 0; i < utils.KostyaColumnCounter(); i++ {
 		cols[i+1] = "f" + strconv.FormatInt(i, 10)
 	}
-	var rowCount int64 = int64(len(rows))
-	var rowIndex int64
-	var values []interface{} = make([]interface{}, utils.KostyaColumnCounter()+1)
-	log.Printf("Insert for totalRows = %d", rowCount)
-	for rowIndex = 0; rowIndex < rowCount; rowIndex++ {
-		//if math.Mod(float64(rowIndex), 1000) < 0.001 {
-		log.Printf("[Row: %d]Insert", rowIndex)
-		//}
-		var strFields = rows[rowIndex].fields
-		var strSql = fmt.Sprintf(`
+	var sql = fmt.Sprintf(`
 		INSERT INTO %s (
 			%s
 		) VALUES (
 			%s
 		)
 		`,
-			tableName,
-			strings.Join(cols[:], ","),
-			strFields) // We need '?,?,?', but repeat ",?" thus we need to chop off 1-st char
+		tableName,
+		strings.Join(cols[:], ","),
+		strings.Repeat(",?", len(cols))[:]) // We need '?,?,?', but repeat ",?" thus we need to chop off 1-st char
 
+	tx := p.db.MustBegin()
+	stmt, err := tx.Prepare(sql)
+	tx.Commit()
+	var rowCount int64 = int64(len(rows))
+	var rowIndex int64
+	var values []interface{} = make([]interface{}, utils.KostyaColumnCounter()+1)
+	log.Printf("Insert for totalRows = %d", rowCount)
+	for rowIndex = 0; rowIndex < rowCount; rowIndex++ {
+		log.Printf("[Row: %d]Insert", rowIndex)
+		var strFields = rows[rowIndex].fields
+		var metrics []string = strings.Split(strFields, ",")
+		if int64(len(metrics)) != utils.KostyaColumnCounter()+1 {
+			log.Panicf("metrics invalid = %d", len(metrics))
+		}
+		var fieldIndex int64
+		values[0] = int64(time.Now().Nanosecond())
+		for fieldIndex = 1; fieldIndex <= utils.KostyaColumnCounter(); fieldIndex++ {
+			f64, err := strconv.ParseFloat(metrics[fieldIndex], 64)
+			if err != nil {
+				panic(err)
+			}
+			values[fieldIndex] = f64
+		}
+		metrics = nil
 		log.Printf("[Row: %d] exec sql for len(values)= %d", rowIndex, len(values))
 
-		var tx = p.db.MustBegin()
-		var rr sql.Result
-		rr, err := tx.Exec(strSql)
+		tx = p.db.MustBegin()
+		_, err := stmt.Exec(values[:]...)
 		err = tx.Commit()
-		//err = stmt.Close()
-		log.Printf("[Row: %d] exec sql for rr%+v", rowIndex, rr)
 		if err != nil {
 			panic(err)
 		}
+	}
+	err = stmt.Close()
+	if err != nil {
+		panic(err)
 	}
 	//err = stmt.Close()
 	//if err != nil {
