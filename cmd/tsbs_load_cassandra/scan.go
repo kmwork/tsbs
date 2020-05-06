@@ -31,8 +31,8 @@ func (d *decoder) Decode(_ *bufio.Reader) *load.Point {
 // Transforms a CSV string encoding a single metric into a CQL INSERT statement.
 // We currently only support a 1-line:1-metric mapping for Cassandra. Implement
 // other functions here to support other formats.
-func singleMetricToInsertStatement(text string) string {
-	insertStatement := "INSERT INTO %s(series_id, timestamp_ns, value) VALUES('%s#%s#%s', %s, %s)"
+func singleMetricToInsertStatement(text string, columnsLine string) string {
+	insertStatement := "INSERT INTO %s(series_id, timestamp_ns, %s) VALUES('%s#%s#%s', %s, %s)"
 	parts := strings.Split(text, ",")
 	tagsBeginIndex := 1                  // list of tags begins after the table name
 	tagsEndIndex := (len(parts) - 1) - 4 // list of tags ends right before the last 4 parts of the line
@@ -42,9 +42,9 @@ func singleMetricToInsertStatement(text string) string {
 	measurementName := parts[tagsEndIndex+1]                        // offset: table + numTags
 	dayBucket := parts[tagsEndIndex+2]                              // offset: table + numTags + measurementName
 	timestampNS := parts[tagsEndIndex+3]                            // offset: table + numTags + numTags + measurementName + dayBucket
-	value := parts[tagsEndIndex+4]                                  // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS
+	value := strings.Join(parts[4:], ",")                           // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS
 
-	return fmt.Sprintf(insertStatement, table, tags, measurementName, dayBucket, timestampNS, value)
+	return fmt.Sprintf(insertStatement, table, columnsLine, measurementName, dayBucket, timestampNS, value)
 }
 
 type eventsBatch struct {

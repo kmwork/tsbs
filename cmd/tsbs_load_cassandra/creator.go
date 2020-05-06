@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/timescale/tsbs/internal/utils"
 	"log"
+	"strconv"
 	"strings"
 	"time"
 
@@ -51,18 +53,23 @@ func (d *dbCreator) CreateDB(dbName string) error {
 	if err := d.globalSession.Query(fmt.Sprintf("create keyspace %s with replication = %s;", dbName, replicationConfiguration)).Exec(); err != nil {
 		return err
 	}
-	for _, cassandraTypename := range []string{"bigint", "float", "double", "boolean", "blob"} {
-		q := fmt.Sprintf(`CREATE TABLE %s.series_%s (
+	var columnsWithType []string = make([]string, utils.KostyaColumnCounter())
+	var i int64
+	for i = 0; i < utils.KostyaColumnCounter(); i++ {
+		columnsWithType[i] = "f" + strconv.FormatInt(i, 10) + " float"
+	}
+
+	q := fmt.Sprintf(`CREATE TABLE %s.cassandra_cpu (
 					series_id text,
 					timestamp_ns bigint,
-					value %s,
+					%s,
 					PRIMARY KEY (series_id, timestamp_ns)
 				 )
 				 WITH COMPACT STORAGE;`,
-			dbName, cassandraTypename, cassandraTypename)
-		if err := d.globalSession.Query(q).Exec(); err != nil {
-			return err
-		}
+		dbName, columnsWithType)
+
+	if err := d.globalSession.Query(q).Exec(); err != nil {
+		return err
 	}
 	return nil
 }

@@ -27,11 +27,7 @@ const (
 // Blessed tables that hold benchmark data:
 var (
 	BlessedTables = []string{
-		"series_bigint",
-		"series_float",
-		"series_double",
-		"series_boolean",
-		"series_blob",
+		"cassandra_cpu",
 	}
 )
 

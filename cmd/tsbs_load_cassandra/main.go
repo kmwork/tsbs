@@ -10,6 +10,7 @@ import (
 	"github.com/timescale/tsbs/cmd/tsbs_generate_queries/uses/devops"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/gocql/gocql"
@@ -118,11 +119,15 @@ func (p *processor) Init(_ int, _ bool) {}
 // creates a gocql.LoggedBatch to insert
 func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 	events := b.(*eventsBatch)
-
+	var columnsLine string = ""
+	var i int64
+	for i = 0; i < utils.KostyaColumnCounter(); i++ {
+		columnsLine += ", f" + strconv.FormatInt(i, 10)
+	}
 	if doLoad {
 		batch := p.dbc.clientSession.NewBatch(gocql.LoggedBatch)
 		for _, event := range events.rows {
-			batch.Query(singleMetricToInsertStatement(event))
+			batch.Query(singleMetricToInsertStatement(event, columnsLine))
 		}
 
 		err := p.dbc.clientSession.ExecuteBatch(batch)
