@@ -34,15 +34,13 @@ func (d *decoder) Decode(_ *bufio.Reader) *load.Point {
 func singleMetricToInsertStatement(text string, columnsLine string) string {
 	insertStatement := "INSERT INTO %s(series_id, timestamp_ns, %s) VALUES('%s#%s#%s', %s, %s)"
 	parts := strings.Split(text, ",")
-	tagsBeginIndex := 1                  // list of tags begins after the table name
 	tagsEndIndex := (len(parts) - 1) - 4 // list of tags ends right before the last 4 parts of the line
 
 	table := parts[0]
-	tags := strings.Join(parts[tagsBeginIndex:tagsEndIndex+1], ",") // offset: table
-	measurementName := parts[tagsEndIndex+1]                        // offset: table + numTags
-	dayBucket := parts[tagsEndIndex+2]                              // offset: table + numTags + measurementName
-	timestampNS := parts[tagsEndIndex+3]                            // offset: table + numTags + numTags + measurementName + dayBucket
-	value := strings.Join(parts[4:], ",")                           // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS
+	measurementName := parts[tagsEndIndex+1] // offset: table + numTags
+	dayBucket := parts[tagsEndIndex+2]       // offset: table + numTags + measurementName
+	timestampNS := parts[tagsEndIndex+3]     // offset: table + numTags + numTags + measurementName + dayBucket
+	value := strings.Join(parts[4:], ",")    // offset: table + numTags + timestamp + measurementName + dayBucket + timestampNS
 
 	return fmt.Sprintf(insertStatement, table, columnsLine, measurementName, dayBucket, timestampNS, value)
 }
