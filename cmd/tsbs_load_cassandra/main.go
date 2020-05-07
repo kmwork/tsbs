@@ -130,7 +130,7 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 	if doLoad {
 		batch := p.dbc.clientSession.NewBatch(gocql.LoggedBatch)
 		for _, event := range events.rows {
-			if strings.Compare("cpu", event) == 0 || strings.Compare("tags", event) == 0 || strings.Index(event, "cpu,f0") == 0 || len(event) == 0 {
+			if len(event) < 25 || strings.Index(event, "cpu,f0") == 0 {
 				continue
 			}
 			var singleMetricCount uint64
