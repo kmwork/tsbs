@@ -129,18 +129,16 @@ func (p *processor) ProcessBatch(b load.Batch, doLoad bool) (uint64, uint64) {
 	var metricCnt uint64 = 0
 	if doLoad {
 		batch := p.dbc.clientSession.NewBatch(gocql.LoggedBatch)
-		for index, event := range events.rows {
-			if strings.Compare("tags", event) == 0 {
+		for _, event := range events.rows {
+			if strings.Compare("cpu", event) == 0 || strings.Compare("tags", event) == 0 || strings.Index(event, "cpu,f0") == 0 || len(event) == 0 {
 				continue
 			}
-			if index >= 4 {
-				var singleMetricCount uint64
-				var strQuery string
-				singleMetricCount, strQuery = singleMetricToInsertStatement(event, columnsLine)
-				batch.Query(strQuery)
-				metricCnt += singleMetricCount
-				rowCnt++
-			}
+			var singleMetricCount uint64
+			var strQuery string
+			singleMetricCount, strQuery = singleMetricToInsertStatement(event, columnsLine)
+			batch.Query(strQuery)
+			metricCnt += singleMetricCount
+			rowCnt++
 		}
 
 		err := p.dbc.clientSession.ExecuteBatch(batch)
