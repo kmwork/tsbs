@@ -1,4 +1,4 @@
 columns=8000
 Summary:
-loaded 9601200 metrics in 55.662sec with 1 workers (mean rate 172490.47 metrics/sec)
-loaded 1200 rows in 55.662sec with 1 workers (mean rate 21.56 rows/sec)
+loaded 16002000 metrics in 94.353sec with 1 workers (mean rate 169597.94 metrics/sec)
+loaded 2000 rows in 94.353sec with 1 workers (mean rate 21.20 rows/sec)
